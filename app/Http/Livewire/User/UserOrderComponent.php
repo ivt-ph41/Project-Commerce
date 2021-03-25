@@ -14,9 +14,13 @@ class UserOrderComponent extends Component
     }
     public function cancel($id){
         $orders = Order::find($id);
-        $orders->update([
-            'status' => 'Cancelled',
-        ]);
+        if($orders->status=='new orders'){
+            $orders->update([
+                'status' => 'Cancelled',
+            ]);
+        }else{
+            $this->emit('status_order');
+        }
     }
     public function render()
     {

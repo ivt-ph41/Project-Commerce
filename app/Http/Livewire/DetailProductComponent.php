@@ -20,11 +20,12 @@ class DetailProductComponent extends Component
     public $comment;
     public $relpy_comment;
     public $quantity;
-
+    public $color;
     public function mount($slug){
         $this->slug = $slug;
         $this->rating = 1;
         $this->quantity = 1;
+        $this->color = 'Black';
     }
     public function up_quantity(){
         $this->quantity++;
@@ -94,7 +95,7 @@ class DetailProductComponent extends Component
     }
     public function storeCart($product_id,$product_name,$quantity,$product_price){
        if(Auth::check()){
-            Cart::add($product_id,$product_name,$quantity,$product_price)->associate('App\Models\Product');
+            Cart::add($product_id,$product_name,$quantity,$product_price,['color' => $this->color])->associate('App\Models\Product');
             $this->emit('cart');
        }else{
            return redirect()->route('login');
@@ -102,7 +103,7 @@ class DetailProductComponent extends Component
    }
    public function storeBuy($product_id,$product_name,$quantity,$product_price){
     if(Auth::check()){
-         Cart::add($product_id,$product_name,$quantity,$product_price)->associate('App\Models\Product');
+         Cart::add($product_id,$product_name,$quantity,$product_price,['color' => $this->color])->associate('App\Models\Product');
          return redirect()->route('product.cart');
     }else{
         return redirect()->route('login');

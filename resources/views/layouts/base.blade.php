@@ -44,6 +44,9 @@
         window.livewire.on('mail',()=>{
             toastr.success('Your response has been saved');
         });
+        window.livewire.on('status_order',()=>{
+            toastr.warning('You cannot cancel an order while it is being shipped');
+        });
         window.livewire.on('modal',()=>{
             $('#modelAddress').modal('hide');
         });

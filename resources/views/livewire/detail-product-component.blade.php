@@ -63,6 +63,21 @@
 									<a class="btn btn-increase" wire:click.prevent = 'up_quantity' href="#"></a>
 								</div>
 							</div>
+                            <div class="quantity">
+                            	<span>Color:</span>
+								<div class="form-check form-check-inline">
+                                    <input class="form-check-input" wire:model = 'color' type="radio" name="inlineRadioOptions" id="inlineRadio1" value="Black" checked='checked'>
+                                    <label class="form-check-label" for="inlineRadio1">Red</label>
+                                  </div>
+                                  <div class="form-check form-check-inline">
+                                    <input class="form-check-input" wire:model = 'color' type="radio" name="inlineRadioOptions" id="inlineRadio2" value="Red">
+                                    <label class="form-check-label" for="inlineRadio2">Black</label>
+                                  </div>
+                                  <div class="form-check form-check-inline">
+                                    <input class="form-check-input" wire:model = 'color' type="radio" name="inlineRadioOptions" id="inlineRadio3" value="Blue">
+                                    <label class="form-check-label" for="inlineRadio3">Blue</label>
+                                  </div>
+							</div>
 							<div class="wrap-butons">
 								<a href="#" wire:click.prevent="storeCart({{$products->id}},'{{$products->name}}',{{$quantity}},{{$products->regular_price}})" class="btn add-to-cart">Add to Cart</a>
                                 <a href="#" wire:click.prevent="storeBuy({{$products->id}},'{{$products->name}}',{{$quantity}},{{$products->regular_price}})" class="btn buy-now">Buy Now</a>
