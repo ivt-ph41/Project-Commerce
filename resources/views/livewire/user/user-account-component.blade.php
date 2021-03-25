@@ -12,7 +12,28 @@
         <div class=" main-content-area">
             <div class="row">
                 <div class="col-lg-2">
-
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                          <a class="text-dark" href="{{route('user.account')}}" ><b>Account management</b></a>
+                          <span class="badge badge-primary badge-pill">14</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <a class="text-dark" href="{{route('user.order')}}" ><b>My order</b></a>
+                          <span class="badge badge-primary badge-pill">2</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <a class="text-dark" href="" ><b>Favorite products</b></a>
+                          <span class="badge badge-primary badge-pill">1</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <a class="text-dark" href="" ><b>My comment</b></a>
+                          <span class="badge badge-primary badge-pill">1</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <a class="text-dark" href="{{route('contact')}}" ><b>Contact Us</b></a>
+                          <span class="badge badge-primary badge-pill">1</span>
+                        </li>
+                      </ul>
                 </div>
                 <div class="col-lg-7 text-muted">
                     <div class="wrap-address-billing">

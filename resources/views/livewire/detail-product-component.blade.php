@@ -37,6 +37,7 @@
                                 <a href="#" class="count-review">(05 review)</a>
                             </div>
                             <h2 class="product-name">{{ $products->name }}</h2>
+                            <p class="text-dark">View: <b class="text-info">{{$products->view}}</b></p>
                             <div class="short-desc">
                                 <ul>
                                     <li>{{$products->short_description}}</li>
@@ -354,5 +355,3 @@
 
 	</main>
 </div>
-
-

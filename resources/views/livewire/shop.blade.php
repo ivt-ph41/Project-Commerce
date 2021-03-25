@@ -85,10 +85,10 @@
 										</a>
 									</div>
                                     @php
-                                        $date = strtotime($product->updated_at);
-                                        $day_update = date('Y-m-d h:i:sa', $date) ;
+                                        $date = strtotime($product->created_at);
+                                        $day_create = date('Y-m-d h:i:sa', $date) ;
                                         $date_now = date('Y-m-d H:i:s') ; //current date
-                                        $days = (strtotime($date_now) - strtotime($day_update)) / (60 * 60 * 24);
+                                        $days = (strtotime($date_now) - strtotime($day_create)) / (60 * 60 * 24);
                                     @endphp
                                     @if ($days<5)
                                         <span class="badge badge-lg badge-danger" style="z-index:10">new</span>

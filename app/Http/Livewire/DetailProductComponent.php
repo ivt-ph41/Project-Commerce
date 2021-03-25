@@ -9,6 +9,7 @@ use Egulias\EmailValidator\Warning\Comment;
 use Livewire\Component;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Livewire\WithPagination;
 class DetailProductComponent extends Component
 {
@@ -19,6 +20,7 @@ class DetailProductComponent extends Component
     public $comment;
     public $relpy_comment;
     public $quantity;
+
     public function mount($slug){
         $this->slug = $slug;
         $this->rating = 1;
@@ -82,6 +84,12 @@ class DetailProductComponent extends Component
         $products = Product::with('product_images','product_details')->where('slug',$this->slug)->first();
         $reviews = Review::with('review_users','review_product','reply_reviews')->where('product_id',$products->id)->orderBy('created_at','DESC')->paginate(5);
         $related_product = Product::where('category_id',$products->category_id)->whereBetween('regular_price',[$products->regular_price-500000,$products->regular_price+500000])->paginate(12);
+        //Đếm view
+        if (!Session::get($products->slug)) { //nếu chưa có session
+            $product_view = Product::findOrFail($products->id);
+            Session::put($products->slug, 'lala'); //set giá trị cho session
+            $product_view->increment('view');
+        }
         return view('livewire.detail-product-component',compact('products','related_product','reviews'))->layout('layouts.base');
     }
     public function storeCart($product_id,$product_name,$quantity,$product_price){

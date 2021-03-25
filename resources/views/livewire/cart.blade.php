@@ -54,10 +54,11 @@
 								</a>
 							</div>
 						</li>
+                        {{Cart::setTax($item->rowId,10)}}
                         @endforeach
 					</ul>
                     @else
-                        <p>No item Cart</p>
+                        <img class="mr-auto" width="250" height="250" src="{{asset('Commerce/assets/images/cart/empty_cart.png')}}" alt="Empty_cart">
                     @endif
 				</div>
 
