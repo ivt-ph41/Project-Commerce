@@ -9,12 +9,12 @@ use GuzzleHttp\Psr7\Request;
 use Livewire\Livewire;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
-class AdminCategoryComponent extends Component
+class AdminProductComponent extends Component
 {
     use WithPagination;
     use WithFileUploads;
     public $ids;
-    public $name;
+    public $name; 
     public $file;
     public $slug;
     public $file_banner = [];
@@ -167,7 +167,7 @@ class AdminCategoryComponent extends Component
         ->Orwhere('status','like','%'.$this->search.'%')->orderBy('status')->Orwhere('created_at','like','%'.$this->search.'%')
         ->Orwhere('updated_at','like','%'.$this->search.'%')->paginate(5);
         }
-        return view('livewire.admin.category-component',compact('categories'))->layout('layouts.admin')->slot('main');
+        return view('livewire.admin.admin-product-component',compact('categories'))->layout('layouts.admin')->slot('main');
     }
 }
 

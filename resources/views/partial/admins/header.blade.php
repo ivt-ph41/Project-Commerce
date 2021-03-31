@@ -1,10 +1,10 @@
 <div class="container-fluid">
     <div class="row">
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        {{-- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="logo-pro">
                 <a href="index.html"><img class="main-logo" src="{{asset('Admintle/img/logo/logo.png')}}"" alt="" /></a>
             </div>
-        </div>
+        </div> --}}
     </div>
 </div>
 <div class="header-advance-area">
@@ -39,7 +39,11 @@
                                                 <a href="#" class="dropdown-item">Contact Support</a>
                                             </div>
                                         </li>
-                                        <li class="nav-item"><a href="#" class="nav-link">Support</a>
+                                        <li class="nav-item">
+                                        <form action="{{route('logout')}}" method="post">
+                                            @csrf
+                                            <input type="submit" onclick="return confirm('Are you sure you want to log out?')" class="btn btn-outline-primary mt-3" value="Logout">
+                                        </form>
                                         </li>
                                     </ul>
                                 </div>
@@ -171,7 +175,7 @@
                                         <li class="nav-item">
                                             <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle">
                                                     <img src="{{asset('Admintle/img/product/pro4.jpg')}}"" alt="" />
-                                                    <span class="admin-name">Prof.Anderson</span>
+                                                    <span class="admin-name">{{Auth::user()->name}}</span>
                                                     <i class="fa fa-angle-down edu-icon edu-down-arrow"></i>
                                                 </a>
                                             <ul role="menu" class="dropdown-header-top author-log dropdown-menu animated zoomIn">

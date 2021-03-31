@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddProductsTable extends Migration
+class AddDiscountsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class AddProductsTable extends Migration
      */
     public function up()
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->integer('sale_percent')->default(0);
+        Schema::table('discounts', function (Blueprint $table) {
+            $table->string('image')->nullable();
+            $table->string('quantity');
         });
     }
 
@@ -25,6 +26,8 @@ class AddProductsTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('discounts', function (Blueprint $table) {
+            //
+        });
     }
 }

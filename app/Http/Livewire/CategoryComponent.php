@@ -15,6 +15,9 @@ class CategoryComponent extends Component
     public $sort;
     public $slug_cat;
     public $SelectColor = [];
+    public $SelectRam = [];
+    public $price_start;
+    public $price_end;
     public $search;
     public function mount($slug_cat){
         $this->sort = "default";
@@ -50,6 +53,13 @@ class CategoryComponent extends Component
         $category_sliders = Category::where('slug',$this->slug_cat)->first()->category_sliders;
         if($this->SelectColor != Null){
             $products = Products::with('product_images')->where('category_id',$category->id)->whereIn('color',$this->SelectColor)->paginate(20);
+        }
+        if($this->SelectRam != Null){
+            $products = Products::with('product_images')->where('category_id',$category->id)->whereIn('ram',$this->SelectRam)->paginate(20);
+        }
+        if($this->price_start >0 && $this->price_end >0){
+            $products = Products::with('product_images')->where('category_id',$category->id)->whereBetween('regular_price', [$this->price_start, $this->price_end])
+            ->paginate(20);
         }
         return view('livewire.shop',compact('products','brand_show','category_sliders'))->layout('layouts.base');;
     }

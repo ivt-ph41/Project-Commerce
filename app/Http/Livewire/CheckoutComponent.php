@@ -33,6 +33,9 @@ class CheckoutComponent extends Component
         $this->stress = Auth::user()->stress;
         $this->payment_method = 'Payment on delivery';
     }
+    public function ResetInput(){
+        $this->discount = '';
+    }
     public function update(){
         $this->validate(
             [
@@ -57,6 +60,9 @@ class CheckoutComponent extends Component
         ]);
         $this->emit('modal');
     }
+    public function destroyAll(){
+        Cart::destroy();
+    }
     public  function checkout()
     {
         if(Cart::count()>0){
@@ -66,8 +72,8 @@ class CheckoutComponent extends Component
             else{
                 $discounts = Discount::with('discount_users')->where('code',$this->discount)->first();
                 if(!empty($discounts)){
-                    if(!empty($discounts->discount_users->first()->id)){
-                        if($discounts->discount_users->first()->id == Auth::user()->id){
+                    if(!empty($discounts->discount_users->first()->pivot->status)){
+                        if($discounts->discount_users->first()->pivot->status == 'enable'){
                             if($discounts->type=='1'){
                                 $orders = Order::create([
                                     'user_id' => Auth::user()->id,
@@ -111,8 +117,10 @@ class CheckoutComponent extends Component
                     ]);
                 };
                 $this->emit('thankyou');
+                $this->destroyAll();
+                //$this->ResetInput();
                 if(Discount::where('code',$this->discount)->first()){
-                    Discount::where('code',$this->discount)->first()->discount_users()->detach(Auth::user()->id);
+                    Discount::where('code',$this->discount)->first()->discount_users()->updateExistingPivot(Auth::user()->id,['status'=>'disable']);
                 }
             }
         }else{

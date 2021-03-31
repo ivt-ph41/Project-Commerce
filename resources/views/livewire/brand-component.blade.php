@@ -183,12 +183,12 @@
 					<div class="widget mercado-widget filter-widget price-filter">
 						<h2 class="widget-title">Price</h2>
 						<div class="widget-content">
-							<div id="slider-range"></div>
-							<p>
-								<label for="amount">Price:</label>
-								<input type="text" id="amount" readonly>
-								<button class="filter-submit">Filter</button>
-							</p>
+							<form class="form-inline">
+                                <div class="form-group">
+                                    <input type="text" name="" id="" class="form-control" style="width:80px" wire:model = 'price_start' placeholder="form" aria-describedby="helpId">-
+                                    <input type="text" name="" id="" class="form-control" style="width:80px" wire:model = 'price_end' placeholder="to" aria-describedby="helpId">
+                                </div>
+                            </form>
 						</div>
 					</div><!-- Price-->
 
@@ -207,7 +207,21 @@
 						</div>
 					</div><!-- Color -->
                     @endif
-
+                    @if (isset($SelectRam))
+                    <div class="widget mercado-widget filter-widget">
+						<h2 class="widget-title">Memory Ram</h2>
+						<div class="widget-content">
+							<ul class="list-style vertical-list has-count-index">
+								<li class="text-muted "><input class="" wire:model='SelectRam' type="checkbox" name="" value="1"> 1Gb</li>
+								<li class="text-muted list-item"><input class="" wire:model='SelectRam' type="checkbox" name="" value="2"> 2Gb</li>
+								<li class="text-muted list-item"><input class="" wire:model='SelectRam' type="checkbox" name="" value="3"> 3Gb</li>
+								<li class="text-muted list-item"><input class="" wire:model='SelectRam' type="checkbox" name="" value="4"> 4Gb</li>
+								<li class="text-muted list-item"><input class="" wire:model='SelectRam' type="checkbox" name="" value="5"> 5Gb</li>
+								<li class="list-muted"><input class="" wire:model='SelectRam' type="checkbox" name="" value="6"> 6Gb</li>
+							</ul>
+						</div>
+					</div><!-- Color -->
+                    @endif
 					<div class="widget mercado-widget filter-widget">
 						<h2 class="widget-title">Size</h2>
 						<div class="widget-content">

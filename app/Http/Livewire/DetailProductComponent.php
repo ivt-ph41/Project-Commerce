@@ -82,8 +82,9 @@ class DetailProductComponent extends Component
     }
     public function render()
     {
-        $products = Product::with('product_images','product_details')->where('slug',$this->slug)->first();
+        $products = Product::with('product_images','product_brands')->where('slug',$this->slug)->first();
         $reviews = Review::with('review_users','review_product','reply_reviews')->where('product_id',$products->id)->orderBy('created_at','DESC')->paginate(5);
+        $review_count = Review::with('review_users','review_product','reply_reviews')->where('product_id',$products->id)->count();
         $related_product = Product::where('category_id',$products->category_id)->whereBetween('regular_price',[$products->regular_price-500000,$products->regular_price+500000])->paginate(12);
         //Đếm view
         if (!Session::get($products->slug)) { //nếu chưa có session
@@ -91,7 +92,7 @@ class DetailProductComponent extends Component
             Session::put($products->slug, 'lala'); //set giá trị cho session
             $product_view->increment('view');
         }
-        return view('livewire.detail-product-component',compact('products','related_product','reviews'))->layout('layouts.base');
+        return view('livewire.detail-product-component',compact('products','related_product','reviews','review_count'))->layout('layouts.base');
     }
     public function storeCart($product_id,$product_name,$quantity,$product_price){
        if(Auth::check()){

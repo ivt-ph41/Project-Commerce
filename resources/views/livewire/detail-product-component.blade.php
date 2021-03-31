@@ -1,8 +1,6 @@
 <div>
     <main id="main" class="main-site">
-
 		<div class="container">
-
 			<div class="wrap-breadcrumb">
 				<ul>
 					<li class="item-link"><a href="#" class="link">home</a></li>
@@ -13,19 +11,18 @@
                 <div class="col-lg-9 col-md-8 col-sm-8 col-xs-12 main-content-area">
 					<div class="wrap-product-detail">
 						<div class="detail-media">
-							<div class="product-gallery">
-							  <ul class="slides">
-                                <li data-thumb="{{asset('Commerce/assets/images/products/'.$products->image)}}">
-                                    <img src="{{asset('Commerce/assets/images/products/'.$products->image)}}" alt="product thumbnail" />
-                                </li>
-							    {{-- @foreach ($products->product_images as $images)
-                                    <li data-thumb="{{asset('Commerce/assets/images/products/'.$images->images)}}">
-                                        <img src="{{asset('Commerce/assets/images/products/'.$images->images)}}" alt="product thumbnail" />
-                                    </li>
-                                @endforeach --}}
-
-							  </ul>
-							</div>
+                            <div class="wrapper">
+                                <div class="card">
+                                    <div class="img-magnifier-container">
+                                        <img id="myimage" src="{{asset('Commerce/assets/images/products/'.$products->image)}}" width="300" height="240" alt="Girl">
+                                        <div class="thumbnail text-center">
+                                            @foreach ($products->product_images as $images)
+                                            <img id="name" onclick="change_image(this)" src="{{asset('Commerce/assets/images/products/'.$images->images)}}" width="70">
+                                            @endforeach
+                                        </div>
+                                      </div>
+                                </div>
+                            </div>
 						</div>
 						<div class="detail-info">
 							<div class="product-rating">
@@ -34,7 +31,7 @@
                                 <i class="fa fa-star" aria-hidden="true"></i>
                                 <i class="fa fa-star" aria-hidden="true"></i>
                                 <i class="fa fa-star" aria-hidden="true"></i>
-                                <a href="#" class="count-review">(05 review)</a>
+                                <a href="#" class="count-review">({{$review_count}} review)</a>
                             </div>
                             <h2 class="product-name">{{ $products->name }}</h2>
                             <p class="text-dark">View: <b class="text-info">{{$products->view}}</b></p>
@@ -65,18 +62,15 @@
 							</div>
                             <div class="quantity">
                             	<span>Color:</span>
-								<div class="form-check form-check-inline">
-                                    <input class="form-check-input" wire:model = 'color' type="radio" name="inlineRadioOptions" id="inlineRadio1" value="Black" checked='checked'>
-                                    <label class="form-check-label" for="inlineRadio1">Red</label>
-                                  </div>
-                                  <div class="form-check form-check-inline">
-                                    <input class="form-check-input" wire:model = 'color' type="radio" name="inlineRadioOptions" id="inlineRadio2" value="Red">
-                                    <label class="form-check-label" for="inlineRadio2">Black</label>
-                                  </div>
-                                  <div class="form-check form-check-inline">
-                                    <input class="form-check-input" wire:model = 'color' type="radio" name="inlineRadioOptions" id="inlineRadio3" value="Blue">
-                                    <label class="form-check-label" for="inlineRadio3">Blue</label>
-                                  </div>
+                                    <label class="btn btn-dark active">
+                                        <input class="form-check-input" wire:model = 'color' type="radio" name="inlineRadioOptions" id="inlineRadio1" value="Black" checked='checked'> Black
+                                    </label>
+                                    <label class="btn btn-danger">
+                                        <input class="form-check-input" wire:model = 'color' type="radio" name="inlineRadioOptions" id="inlineRadio2" value="Red"> Red
+                                    </label>
+                                    <label class="btn btn-info">
+                                        <input class="form-check-input" wire:model = 'color' type="radio" name="inlineRadioOptions" id="inlineRadio3" value="Blue"> Blue
+                                    </label>
 							</div>
 							<div class="wrap-butons">
 								<a href="#" wire:click.prevent="storeCart({{$products->id}},'{{$products->name}}',{{$quantity}},{{$products->regular_price}})" class="btn add-to-cart">Add to Cart</a>
@@ -94,19 +88,21 @@
 									<table class="shop_attributes ml-5">
 										<tbody>
                                             <tr>
-												<th>Origin</th><td class="product_weight">{{ $products->product_details->origin }}</td>
+												<th>Origin</th><td class="product_weight">{{ $products->origin }}</td>
 											</tr>
                                             <tr>
-												<th>Brand</th><td class="product_weight">{{ $products->product_details->brand }}</td>
+												<th>Brand</th><td class="product_weight">@if ($products->product_brands)
+                                                    {{ $products->product_brands->name}}
+                                                @endif</td>
 											</tr>
 											<tr>
-												<th>Weight</th><td class="product_weight">{{ $products->product_details->weight }}</td>
+												<th>Weight</th><td class="product_weight">{{ $products->weight }}Kg</td>
 											</tr>
 											<tr>
-												<th>Dimensions</th><td class="product_dimensions">{{ $products->product_details->dimension }}</td>
+												<th>Dimensions</th><td class="product_dimensions">{{ $products->Dimension }}</td>
 											</tr>
 											<tr>
-												<th>Color</th><td><p>{{ $products->product_details->color }}</p></td>
+												<th>Color</th><td><p>{{ $products->color }}</p></td>
 											</tr>
 										</tbody>
 									</table>
@@ -115,7 +111,7 @@
                                 <h4 class="text-muted pt-3 pl-3">DESCRIPTION</h4>
                                     {{$products->description}}
 								</div>
-								<div class="text-dark pt-3 pl-3" id="reviews">
+								<div class="text-dark pt-3 pl-3" id="reviews" wire:poll.10000ms = 'render'>
                                     <h4 class="text-muted">REVIEWS</h4>
                                     @if (Auth::check())
                                     <div id="review_form_wrapper" class="ml-5">
@@ -370,3 +366,76 @@
 
 	</main>
 </div>
+<script>
+function change_image(image){
+var image_container = document.getElementById("myimage");
+
+
+image_container.src = image.src;
+
+}
+function magnify(imgID, zoom) {
+  var img, glass, w, h, bw;
+  img = document.getElementById(imgID);
+
+  /* Create magnifier glass: */
+  glass = document.createElement("DIV");
+  glass.setAttribute("class", "img-magnifier-glass");
+
+  /* Insert magnifier glass: */
+  img.parentElement.insertBefore(glass, img);
+
+  /* Set background properties for the magnifier glass: */
+  glass.style.backgroundImage = "url('" + img.src + "')";
+  glass.style.backgroundRepeat = "no-repeat";
+  glass.style.backgroundSize = (img.width * zoom) + "px " + (img.height * zoom) + "px";
+  bw = 3;
+  w = glass.offsetWidth / 2;
+  h = glass.offsetHeight / 2;
+
+  /* Execute a function when someone moves the magnifier glass over the image: */
+  glass.addEventListener("mousemove", moveMagnifier);
+  img.addEventListener("mousemove", moveMagnifier);
+
+  /*and also for touch screens:*/
+  glass.addEventListener("touchmove", moveMagnifier);
+  img.addEventListener("touchmove", moveMagnifier);
+  function moveMagnifier(e) {
+    var pos, x, y;
+    /* Prevent any other actions that may occur when moving over the image */
+    e.preventDefault();
+    /* Get the cursor's x and y positions: */
+    pos = getCursorPos(e);
+    x = pos.x;
+    y = pos.y;
+    /* Prevent the magnifier glass from being positioned outside the image: */
+    if (x > img.width - (w / zoom)) {x = img.width - (w / zoom);}
+    if (x < w / zoom) {x = w / zoom;}
+    if (y > img.height - (h / zoom)) {y = img.height - (h / zoom);}
+    if (y < h / zoom) {y = h / zoom;}
+    /* Set the position of the magnifier glass: */
+    glass.style.left = (x - w) + "px";
+    glass.style.top = (y - h) + "px";
+    /* Display what the magnifier glass "sees": */
+    glass.style.backgroundPosition = "-" + ((x * zoom) - w + bw) + "px -" + ((y * zoom) - h + bw) + "px";
+  }
+
+  function getCursorPos(e) {
+    var a, x = 0, y = 0;
+    e = e || window.event;
+    /* Get the x and y positions of the image: */
+    a = img.getBoundingClientRect();
+    /* Calculate the cursor's x and y coordinates, relative to the image: */
+    x = e.pageX - a.left;
+    y = e.pageY - a.top;
+    /* Consider any page scrolling: */
+    x = x - window.pageXOffset;
+    y = y - window.pageYOffset;
+    return {x : x, y : y};
+  }
+}
+/* Execute the magnify function: */
+magnify("myimage", 3);
+/* Specify the id of the image, and the strength of the magnifier glass: */
+</script>
+

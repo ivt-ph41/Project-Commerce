@@ -77,11 +77,14 @@
                     {{-- {{dd($products->first()->product_images->first()->images)}} --}}
 					<div class="row">
 						@foreach ($products as $product)
-                            <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 mb-3 ">
-								<div class="product product-style-3 equal-elem card">
+                            <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 mb-3 h-10 ">
+								<div class="product product-style-3 equal-elem card rounded">
 									<div class="product-thumnail">
 										<a href="{{route('product.detail',['slug' =>$product->slug ])}}" title="{{$product->name}}">
 											<figure><img src="{{asset('Commerce/assets/images/products/'.$product->image)}}" alt="{{ $product->image }}"></figure>
+                                            @if($product->sale_percent > 0)
+                                                <span class="badge badge-pill badge-primary">- {{$product->sale_percent}} %</span>
+                                            @endif
 										</a>
 									</div>
                                     @php
@@ -91,9 +94,9 @@
                                         $days = (strtotime($date_now) - strtotime($day_create)) / (60 * 60 * 24);
                                     @endphp
                                     @if ($days<5)
-                                        <span class="badge badge-lg badge-danger" style="z-index:10">new</span>
+                                        <span class="badge badge-lg badge-danger" style="z-index:2;position:absolute;top:10px;right:10px">new</span>
                                     @endif
-									<div class="product-info">
+									<div class="product-info pl-3">
 										<a href="#" class="product-name"><span>{{$product->name}}</span></a>
 										<div class="wrap-price"><span class="product-price text-warning">{{$product->regular_price}}</span></div>
                                         <div id="carouselId" class="carousel slide" data-ride="carousel">
@@ -171,12 +174,12 @@
 					<div class="widget mercado-widget filter-widget price-filter">
 						<h2 class="widget-title">Price</h2>
 						<div class="widget-content">
-							<div id="slider-range"></div>
-							<p>
-								<label for="amount">Price:</label>
-								<input type="text" id="amount" readonly>
-								<button class="filter-submit">Filter</button>
-							</p>
+							<form class="form-inline">
+                                <div class="form-group">
+                                    <input type="text" name="" id="" class="form-control" style="width:80px" wire:model = 'price_start' placeholder="from" aria-describedby="helpId">-
+                                    <input type="text" name="" id="" class="form-control" style="width:80px" wire:model = 'price_end' placeholder="to" aria-describedby="helpId">
+                                </div>
+                            </form>
 						</div>
 					</div><!-- Price-->
 
@@ -191,6 +194,21 @@
 								<li class="text-primary list-item"><input class="" wire:model='SelectColor' type="checkbox" name="" value="Blue"> Blue</li>
 								<li class="text-muted list-item"><input class="" wire:model='SelectColor' type="checkbox" name="" value="Grey"> Grey</li>
 								<li class="list-item"><input class="" wire:model='SelectColor' type="checkbox" name="" value="Pink"> Pink</li>
+							</ul>
+						</div>
+					</div><!-- Color -->
+                    @endif
+                    @if (isset($SelectRam))
+                    <div class="widget mercado-widget filter-widget">
+						<h2 class="widget-title">Memory Ram</h2>
+						<div class="widget-content">
+							<ul class="list-style vertical-list has-count-index">
+								<li class="text-muted "><input class="" wire:model='SelectRam' type="checkbox" name="" value="1"> 1Gb</li>
+								<li class="text-muted list-item"><input class="" wire:model='SelectRam' type="checkbox" name="" value="<i class="ri-24-hours-fill"></i> 2Gb</li>
+								<li class="text-muted list-item"><input class="" wire:model='SelectRam' type="checkbox" name="" value="3"> 3Gb</li>
+								<li class="text-muted list-item"><input class="" wire:model='SelectRam' type="checkbox" name="" value="4"> 4Gb</li>
+								<li class="text-muted list-item"><input class="" wire:model='SelectRam' type="checkbox" name="" value="5"> 5Gb</li>
+								<li class="list-muted"><input class="" wire:model='SelectRam' type="checkbox" name="" value="6"> 6Gb</li>
 							</ul>
 						</div>
 					</div><!-- Color -->

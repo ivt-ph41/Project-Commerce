@@ -14,6 +14,8 @@ class ShopComponent extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
     public $sort;
+    public $price_start;
+    public $price_end;
     public $search;
     public function mount(){
         $this->sort = "default";
@@ -42,6 +44,10 @@ class ShopComponent extends Component
             $products = Products::with('product_images')->Orwhere('name','like','%'.$this->search.'%')->Orwhere('regular_price','like','%'.$this->search.'%')->orderBy('regular_price','DESC')->paginate(20);
         }else
         $products = Products::with('product_images')->Orwhere('name','like','%'.$this->search.'%')->Orwhere('regular_price','like','%'.$this->search.'%')->paginate(20);
+        if($this->price_start >0 && $this->price_end >0){
+            $products = Products::with('product_images')->whereBetween('regular_price', [$this->price_start, $this->price_end])
+            ->paginate(20);
+        }
         return view('livewire.shop',compact('products'))->layout('layouts.base');;
     }
 }

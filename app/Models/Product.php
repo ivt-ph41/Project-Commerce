@@ -19,12 +19,12 @@ class Product extends Model
         return $this->hasMany(ProductImage::class, 'product_id', 'id');
     }
     /**
-     * Get the user associated with the Product
+     * Get the user that owns the Product
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function product_details()
+    public function product_brands()
     {
-        return $this->hasOne(DetaiProduct::class, 'product_id', 'id');
+        return $this->belongsTo(Manufacturer::class, 'manufacturer_id', 'id');
     }
 }

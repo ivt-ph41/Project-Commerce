@@ -113,8 +113,8 @@
 						<p class="summary-info grand-total"><span>Grand Total</span>
                             <span class="grand-total-price">
                             @if (isset($discounts))
-                                @if (!empty($discounts->discount_users->first()->id))
-                                    @if ($discounts->discount_users->first()->id == Auth::user()->id)
+                                @if (!empty($discounts->discount_users->first()->pivot->status == 'enable'))
+                                    @if ($discounts->discount_users->first()->pivot->status == 'enable')
                                         @if ($discounts->type==1)
                                         {{(Cart::total(0,0,''))-$discounts->reduced_price}} VNĐ
                                         @else
@@ -142,6 +142,33 @@
                                 <label for="coupon-code">Enter Your Coupon code:</label>
                                 <input id="coupon-code" wire:model = 'discount' type="text" name="coupon-code" value="" placeholder="">
                             </p>
+                            @if (isset($discounts))
+                                @if (!empty($discounts->discount_users->first()->pivot->status == 'enable'))
+                                    @if ($discounts->discount_users->first()->pivot->status == 'enable')
+                                        @if ($discounts->type==1)
+                                        <div class="alert alert-primary" role="alert">
+                                            <strong>You get {{$discounts->reduced_price}}VNĐ off</strong>
+                                        </div>
+                                        @else
+                                        <div class="alert alert-primary" role="alert">
+                                            <strong>You get {{$discounts->reduced_price}}% off</strong>
+                                        </div>
+                                        @endif
+                                    @else
+                                    <div class="alert alert-danger" role="alert">
+                                        <strong>Coupon code is incorrect or has expired</strong>
+                                    </div>
+                                    @endif
+                                @else
+                                <div class="alert alert-danger" role="alert">
+                                    <strong>Coupon code is incorrect or has expired</strong>
+                                </div>
+                                @endif
+                            @else
+                            <div class="alert alert-danger" role="alert">
+                                <strong>Coupon code is incorrect or has expired</strong>
+                            </div>
+                            @endif
                             <buton type="submit" wire:click.prevent = 'show_discount' class="btn btn-small">Apply</buton>
 					</div>
 				</div>

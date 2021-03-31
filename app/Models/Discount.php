@@ -18,6 +18,6 @@ class Discount extends Model
      */
     public function discount_users()
     {
-        return $this->belongsToMany(User::class, 'user_discount', 'discount_id', 'user_id');
+        return $this->belongsToMany(User::class, 'user_discount', 'discount_id', 'user_id')->withPivot('status')->withTimestamps();
     }
 }

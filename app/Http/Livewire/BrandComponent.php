@@ -17,6 +17,9 @@ class BrandComponent extends Component
     public $slug_brand;
     public $slug_cat;
     public $SelectColor = [];
+    public $SelectRam = [];
+    public $price_start;
+    public $price_end;
     public function mount($slug_brand,$slug_cat){
         $this->sort = "default";
         $this->slug_brand = $slug_brand;
@@ -53,6 +56,13 @@ class BrandComponent extends Component
         $brand_sliders = Manufacturer::where('slug',$this->slug_brand)->first()->brand_sliders;
         if($this->SelectColor != Null){
             $products = Products::with('product_images')->where('manufacturer_id',$brand->id)->whereIn('color',$this->SelectColor)->paginate(20);
+        }
+        if($this->SelectRam != Null){
+            $products = Products::with('product_images')->where('manufacturer_id',$brand->id)->whereIn('ram',$this->SelectRam)->paginate(20);
+        }
+        if($this->price_start >0 && $this->price_end >0){
+            $products = Products::with('product_images')->where('manufacturer_id',$category->id)->whereBetween('regular_price', [$this->price_start, $this->price_end])
+            ->paginate(20);
         }
         return view('livewire.brand-component',compact('products','brand_show','brand_sliders'))->layout('layouts.base');;
     }

@@ -5,6 +5,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Home</title>
+
     <link rel="shortcut icon" type="image/x-icon" href="{{asset('Commerce/assets/images/favicon.ico')}}">
 	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,400italic,700,700italic,900,900italic&amp;subset=latin,latin-ext" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Open%20Sans:300,400,400italic,600,600italic,700,700italic&amp;subset=latin,latin-ext" rel="stylesheet">
@@ -15,6 +16,10 @@
 	<link rel="stylesheet" type="text/css" href="{{asset('Commerce/assets/css/chosen.min.css')}}">
 	<link rel="stylesheet" type="text/css" href="{{asset('Commerce/assets/css/style.css')}}">
 	<link rel="stylesheet" type="text/css" href="{{asset('Commerce/assets/css/color-01.css')}}">
+    {{-- zoom imge --}}
+    <link rel="stylesheet" type="text/css" href="{{asset('Commerce/assets/css/zoom_image.css')}}">
+    <!-- Chat_Room -->
+    <link rel="stylesheet" type="text/css" href="{{asset('Commerce/assets/css/chat_room.css')}}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA==" crossorigin="anonymous" />
     <!--Select Images-->
      <!-- jQuery library -->
@@ -78,6 +83,13 @@
                 'error',
             )
         });
+        window.livewire.on('voucher',()=>{
+            Swal.fire(
+                'Received the code successfully!',
+                'Please go to the voucher page for details!',
+                'success',
+            )
+        });
     </script>
 	<script src="{{asset('Commerce/assets/js/jquery-1.12.4.minb8ff.js?ver=1.12.4')}}"></script>
 	<script src="{{asset('Commerce/assets/js/jquery-ui-1.12.4.minb8ff.js?ver=1.12.4')}}"></script>
@@ -97,5 +109,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <!-- Select images -->
     <script src="{{asset('Commerce/assets/js/sweetalert.js')}}"></script>
+
+    <script src="{{asset('Commerce/assets/js/multizoom.js')}}"></script>
 </body>
 </html>

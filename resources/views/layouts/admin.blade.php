@@ -72,7 +72,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA==" crossorigin="anonymous" />
       <!-- buttons CSS
 		============================================ -->
-        <link rel="stylesheet" href="css/buttons.css">
+    <link rel="stylesheet" href="css/buttons.css">
+    <!-- Chat_Room -->
+    <link rel="stylesheet" type="text/css" href="{{asset('Commerce/assets/css/chat_room.css')}}">
+    <!-- Zôm-image -->
+    <link rel="stylesheet" type="text/css" href="{{asset('Admintle/css/zoom_img.css')}}">
+    <script  src = "https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     @livewireStyles
 </head>
 
@@ -161,9 +166,9 @@
         <!-- tawk chat JS
             ============================================ -->
         <script src="{{asset('Admintle/js/tawk-chat.js')}}"></script>
+
         <!-- jQuery library -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
         <!-- Popper JS -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 

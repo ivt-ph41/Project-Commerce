@@ -11,5 +11,5 @@ var options = {
 'templateSelection': custom_template,
 'templateResult': custom_template,
 }
-$('#id_select2_example').select2(options);
+// $('#id_select2_example').select2(options);
 $('.select2-container--default .select2-selection--single').css({'height': '220px'});
