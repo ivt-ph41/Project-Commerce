@@ -14,10 +14,10 @@
                             <div class="wrapper">
                                 <div class="card">
                                     <div class="img-magnifier-container">
-                                        <img id="myimage" src="{{asset('Commerce/assets/images/products/'.$products->image)}}" width="300" height="240" alt="Girl">
+                                        <img id="myimage" src="{{asset('storage/'.$products->image)}}" width="300" height="240" alt="Girl">
                                         <div class="thumbnail text-center">
                                             @foreach ($products->product_images as $images)
-                                            <img id="name" onclick="change_image(this)" src="{{asset('Commerce/assets/images/products/'.$images->images)}}" width="70">
+                                            <img id="name" onclick="change_image(this)" src="{{asset('storage/'.$images->images)}}" width="70">
                                             @endforeach
                                         </div>
                                       </div>
@@ -43,7 +43,7 @@
                             {{-- <div class="wrap-social">
                             	<a class="link-socail" href="#"><img src="{{asset('Commerce/assets/images/products/'.$products->image)}}" alt=""></a>
                             </div> --}}
-                            <div class="wrap-price"><span class="product-price text-warning">{{$products->regular_price}}</span>
+                            <div class="wrap-price"><span class="product-price text-warning">{{number_format($products->regular_price)}} VNĐ</span>
                                 @if ($products->sale_percent>0)
                                 <span class="text-dark"> -{{$products->sale_percent}}%</span>
                                 @endif
@@ -104,6 +104,18 @@
 											<tr>
 												<th>Color</th><td><p>{{ $products->color }}</p></td>
 											</tr>
+                                            <tr>
+												<th>Operating system</th><td><p>{{ $products->operating_system }}</p></td>
+											</tr>
+                                            <tr>
+												<th>Ram</th><td><p>{{ $products->ram }} GB</p></td>
+											</tr>
+                                            <tr>
+												<th>Network connect</th><td><p>{{ $products->network_connect }}</p></td>
+											</tr>
+                                            <tr>
+												<th>Battery capacity</th><td><p>{{ $products->battery_capacity }}</p></td>
+											</tr>
 										</tbody>
 									</table>
 								</div>
@@ -141,7 +153,7 @@
                                                     <p class="comment-form-comment">
                                                         <label for="comment">Your review <span class="required">*</span>
                                                         </label>
-                                                        <textarea id="comment" wire:model='comment' name="comment" class="w" rows="3"></textarea>
+                                                        <textarea id="comment" wire:model.defer='comment' name="comment" class="w" rows="3"></textarea>
                                                         @error('comment')
                                                             <small class="text-primary">{{$message}}</small>
                                                         @enderror
@@ -171,7 +183,7 @@
                                                                 <div id="" class="form_reply">
                                                                     <form action="" wire:submit.prevent='reply({{$review->id}})' method="post" class="mt-2">
                                                                         <div class="form-group">
-                                                                          <input type="text" wire:model='relpy_comment'  name="" id="" class="form-control w-50" placeholder="" aria-describedby="helpId">
+                                                                          <input type="text" wire:model.lazy='relpy_comment'  name="" id="" class="form-control w-50" placeholder="" aria-describedby="helpId">
                                                                           @error('relpy_comment')
                                                                                 <small class="text-primary">Vui lòng nhập phản hồi</small><br>
                                                                           @enderror
@@ -266,12 +278,12 @@
 									<div class="product product-widget-style">
 										<div class="thumbnnail">
 											<a href="{{ route('product.detail',['slug' =>$item->slug]) }}" title="Radiant-360 R6 Wireless Omnidirectional Speaker [White]">
-												<figure><img src="{{asset('Commerce/assets/images/products/'.$item->image)}}" alt=""></figure>
+												<figure><img src="{{asset('storage/'.$item->image)}}" alt=""></figure>
 											</a>
 										</div>
 										<div class="product-info">
 											<a href="#" class="product-name"><span>{{$item->name}}</span></a>
-											<div class="wrap-price"><span class="product-price">{{ $item->regular_price}}</span></div>
+											<div class="wrap-price"><span class="product-price">{{number_format($item->regular_price)}} VNĐ</span></div>
 										</div>
 									</div>
 								</li>
@@ -312,11 +324,11 @@
                                 <div class="col-md-2">
                                     <a href="{{ route('product.detail',['slug' =>$item->slug]) }}">
                                         <div class="card mb-2">
-                                            <img class="card-img-top" src="{{asset('Commerce/assets/images/products/'.$item->image)}}"
+                                            <img class="card-img-top" src="{{asset('storage/'.$item->image)}}"
                                                 alt="Card image cap">
                                             <div class="card-body">
                                                 <p class="card-title text-warning">{{$item->name}}</p>
-                                                <p class="card-text text-dark">{{$item->regular_price}}</p>
+                                                <p class="card-text text-dark">{{number_format($item->regular_price)}} VNĐ</p>
                                             </div>
                                         </div>
                                     </a>
@@ -337,11 +349,11 @@
                                 <div class="col-md-2">
                                     <a href="{{ route('product.detail',['slug' =>$item->slug]) }}">
                                         <div class="card mb-2">
-                                        <img class="card-img-top" src="{{asset('Commerce/assets/images/products/'.$item->image)}}"
+                                        <img class="card-img-top" src="{{asset('storage/'.$item->image)}}"
                                             alt="Card image cap">
                                         <div class="card-body">
                                             <p class="card-title text-warning">{{$item->name}}</p>
-                                            <p class="card-text text-dark">{{$item->regular_price}}</p>
+                                            <p class="card-text text-dark">{{number_format($item->regular_price)}} VNĐ</p>
                                         </div>
                                         </div>
                                     </a>

@@ -22,7 +22,7 @@
                 <div class="chat_people">
                   <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
                   <div class="chat_ib">
-                    <label for="{{$admin->id}}">{{$admin->name}}</label><span class="chat_date">Dec 25</span>
+                    <label for="{{$admin->id}}" class="text-dark">{{$admin->name}}</label>
                     <p>Test, which is a new approach to have all solutions
                       astrology under one roof.</p>
                   </div>

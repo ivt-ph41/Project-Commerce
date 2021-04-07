@@ -45,10 +45,14 @@
                                 <input class="" type="checkbox" name="">
                             </div>
 							<div class="product-image">
-								<figure><img src="{{asset('Commerce/assets/images/products/'.$item->model->image)}}" alt=""></figure>
+								<figure><img src="{{asset('storage/'.$item->model->image)}}" alt=""></figure>
 							</div>
 							<div class="product-name">
-								<a class="link-to-product" href="{{route('product.detail',['slug' => $item->model->slug]) }}">{{$item->model->name}}</a>
+								<a class="link-to-product" href="{{route('product.detail',['slug' => $item->model->slug]) }}">{{$item->model->name}}
+                                    @foreach ($item->options as $option => $value)
+                                    <p class="text-muted small">Color:{{$value}}<p>
+                                    @endforeach
+                                </a>
 							</div>
 							<div class="price-field produtc-price"><p class="price">{{$item->model->regular_price}}</p></div>
 							<div class="quantity">
@@ -112,22 +116,23 @@
 						</div>
 						<p class="summary-info grand-total"><span>Grand Total</span>
                             <span class="grand-total-price">
-                            @if (isset($discounts))
-                                @if (!empty($discounts->discount_users->first()->pivot->status == 'enable'))
+                            @if (isset($discounts) && $discounts->end_day > now())
+                            {{-- {{dd($discounts->discount_users->first())}} --}}
+                                @if ($discounts->discount_users->first())
                                     @if ($discounts->discount_users->first()->pivot->status == 'enable')
                                         @if ($discounts->type==1)
-                                        {{(Cart::total(0,0,''))-$discounts->reduced_price}} VNĐ
+                                        {{number_format((Cart::total(0,0,''))-$discounts->reduced_price)}} VNĐ
                                         @else
-                                        {{(Cart::total(0,0,''))*(100-$discounts->reduced_price)/100}} VNĐ
+                                        {{number_format((Cart::total(0,0,''))*(100-$discounts->reduced_price)/100)}} VNĐ
                                         @endif
                                     @else
-                                    {{Cart::total(0,0,'')}} VNĐ
+                                    {{Cart::total(0)}} VNĐ
                                     @endif
                                 @else
-                                     {{Cart::total(0,0,'')}} VNĐ
+                                     {{Cart::total(0)}} VNĐ
                                 @endif
                             @else
-                                {{Cart::total(0,0,'')}} VNĐ
+                                {{Cart::total(0)}} VNĐ
                             @endif
                             </span>
                         </p>
@@ -142,8 +147,8 @@
                                 <label for="coupon-code">Enter Your Coupon code:</label>
                                 <input id="coupon-code" wire:model = 'discount' type="text" name="coupon-code" value="" placeholder="">
                             </p>
-                            @if (isset($discounts))
-                                @if (!empty($discounts->discount_users->first()->pivot->status == 'enable'))
+                            @if (isset($discounts) && $discounts->end_day > now())
+                                @if ($discounts->discount_users->first())
                                     @if ($discounts->discount_users->first()->pivot->status == 'enable')
                                         @if ($discounts->type==1)
                                         <div class="alert alert-primary" role="alert">
@@ -203,7 +208,7 @@
                                     <div class="col-md-2">
                                         <a href="{{ route('product.detail',['slug' =>$item->slug]) }}">
                                             <div class="card mb-2">
-                                                <img class="card-img-top" src="{{asset('Commerce/assets/images/products/'.$item->image)}}"
+                                                <img class="card-img-top" src="{{asset('storage/'.$item->image)}}"
                                                     alt="Card image cap">
                                                 <div class="card-body">
                                                     <p class="card-title text-warning">{{$item->name}}</p>
@@ -228,7 +233,7 @@
                                     <div class="col-md-2">
                                         <a href="{{ route('product.detail',['slug' =>$item->slug]) }}">
                                             <div class="card mb-2">
-                                            <img class="card-img-top" src="{{asset('Commerce/assets/images/products/'.$item->image)}}"
+                                            <img class="card-img-top" src="{{asset('storage/'.$item->image)}}"
                                                 alt="Card image cap">
                                             <div class="card-body">
                                                 <p class="card-title text-warning">{{$item->name}}</p>

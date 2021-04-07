@@ -15,7 +15,7 @@
                             <ul class="breadcome-menu">
                                 <li><a href="#">Home</a> <span class="bread-slash">/</span>
                                 </li>
-                                <li><span class="bread-blod">Category</span>
+                                <li><span class="bread-blod">product</span>
                                 </li>
                             </ul>
                         </div>
@@ -44,7 +44,9 @@
                 <select name="sort" wire:model='sort' class="form-control">
                     <option value="default" selected="">Order By</option>
                     <option value="name">Name</option>
-                    <option value="slug">Slug</option>
+                    <option value="price_up">Price Up</option>
+                    <option value="price_down">Price Down</option>
+                    <option value="view">View</option>
                     <option value="created_at">Create Day</option>
                     <option value="updated_at">Update Day</option>
                     <option value="status">Status</option>
@@ -66,64 +68,337 @@
                             <th></th>
                             <th class="text-center">ID</th>
                             <th class="text-center">Name</th>
-                            <th class="text-center">Image</th>
-                            <th class="text-center">Slider Images</th>
-                            <th class="text-center">Brands</th>
+                            <th class="text-center">Images</th>
+                            <th class="text-center">Orgin Price</th>
+                            <th class="text-center">Sale Price</th>
                             <th class="text-center">Status</th>
-                            <th colspan="2" class="text-center">Action</th>
+                            <th colspan="3" class="text-center">Action</th>
                         </tr>
                 </thead>
                 <tbody>
-                    @foreach ($categories as $category)
+                    @foreach ($products as $product)
                             <tr>
-                                <td class="text-center"><input type="checkbox" wire:model = 'SelectDelete' value='{{$category->id}}' ></td>
-                                <td class="text-center" scope="row">{{$category->id}}</td>
-                                <td class="text-center">{{$category->name}}</td>
-                                <td class="text-center"><img width="50" height="50" src="{{asset('storage/'.$category->image)}}" alt="{{$category->image}}"></td>
+                                <td><input class="form-control" type="hidden" wire:model = 'id_dt' name=""></td>
+                                <td class="text-center"><input type="checkbox" wire:model = 'SelectDelete' value='{{$product->id}}' ></td>
+                                <td class="text-center" scope="row">{{$product->id}}</td>
+                                <td class="text-center">{{$product->name}}</td>
+                                <td class="text-center"><img class="products" width="50" height="50" src="{{asset('storage/'.$product->image)}}" alt="{{$product->image}}"></td>
+                                <td class="text-center">{{number_format($product->origin_price)}}</td>
+                                <td class="text-center">{{number_format($product->regular_price)}}</td>
                                 <td class="text-center">
-                                    <div class="form-group">
-                                        <div class="dropdown">
-                                            <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                Sliders
-                                            </button>
-                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-
-                                                @foreach ($category->category_sliders as $category_slider)
-                                                <a class="dropdown-item" href="#"><img src="{{asset('storage/'.$category_slider->images)}}" width="1170" height="240" alt="{{$category_slider->images}}"></a>
-                                                @endforeach
-
-                                            </div>
-                                          </div>
-                                    </div>
-                                <td>
-                                      <select class="form-control" name="" id="">
-                                        @foreach ($category->cate_manus as $item)
-                                            <option value="">{{$item->name}}</option>
-                                        @endforeach
-                                      </select>
-                                </td>
-                                <td class="text-center">
-                                    @if ($category->status=='enable')
-                                        <a name="" id="" wire:click.prevent='status({{$category->id}})' class="btn btn-success" href="#" role="button">{{$category->status}}</a>
+                                    @if ($product->stock_status=='instock')
+                                        <a name="" id="" wire:click.prevent='status({{$product->id}})' class="btn btn-success" href="#" role="button">{{$product->stock_status}}</a>
                                     @else
-                                        <a name="" id="" wire:click.prevent='status({{$category->id}})' class="btn btn-danger" href="#" role="button">{{$category->status}}</a>
+                                        <a name="" id="" wire:click.prevent='status({{$product->id}})' class="btn btn-danger" href="#" role="button">{{$product->stock_status}}</a>
                                     @endif
                                 </td>
-                                <td class="text-center"><button  title="Edit" wire:click.prevent = 'edit({{$category->id}})' data-toggle="modal" data-target="#modalEdit" class="pd-setting-ed"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></td>
-                                <td class=""> <button  title="Trash" onclick="return confirm('Are you sure you want to delete the category?')" wire:click.prevent='delete({{$category->id}})' class="pd-setting-ed"><i class="fa fa-trash-o" aria-hidden="true"></i></button></td>
+                                <td class="text-center"><a type="button" wire:click.prevent = 'detail({{$product->id}})' data-toggle="modal" data-target="#modalDetail" class="btn btn-primary">Detail</button></td>
+                                <td class="text-center"><button  title="Edit" wire:click.prevent = 'edit({{$product->id}})' data-toggle="modal" data-target="#modalEdit" class="pd-setting-ed"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></td>
+                                <td class=""> <button  title="Trash" onclick="return confirm('Are you sure you want to delete the product?')" wire:click.prevent='delete({{$product->id}})' class="pd-setting-ed"><i class="fa fa-trash-o" aria-hidden="true"></i></button></td>
                             </tr>
-                            @endforeach
+                     @endforeach
                 </tbody>
             </table>
         </div>
-        {{$categories->links()}}
+        {{$products->links()}}
     </div>
-    <!-- Modal Add -->
-    <div wire:ignore.self class="modal fade" id="modalAdd" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <!-- Modal Detail -->
+    <div wire:ignore.self class="modal fade" id="modalDetail" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                     <div class="modal-header bg-info">
-                            <h5 class="modal-title">Create Category</h5>
+                            <h5 class="modal-title">Detail product</h5>
+                                <button type="button"  class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                        </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div>
+                            @if ($product_details)
+                            <ul class="list-group">
+                                <li class="list-group-item"><b>Name: </b>{{$product_details->name}}</li>
+                                <li class="list-group-item"><b>Image: </b><img src="{{asset('storage/'.$product_details->image)}}" width='100' height="100"></li>
+                                <li class="list-group-item"><b>Slug: </b>{{$product_details->slug}}</li>
+                                <li class="list-group-item"><a href="{{route('admin.category')}}"><b>Category: </b>{{$product_details->product_categories->name}}</a></li>
+                                <li class="list-group-item"><b>Brand: </b>{{$product_details->product_brands->name}}</li>
+                                <li class="list-group-item"><b>Origin Price: </b>{{$product_details->origin_price}}</li>
+                                <li class="list-group-item"><b>Sale Percent: </b>{{$product_details->sale_percent}}</li>
+                                <li class="list-group-item"><b>Sale price: </b>{{$product_details->regular_price}}</li>
+                                <li class="list-group-item"><b>Short Description: </b>{{$product_details->short_description}}</li>
+                                <li class="list-group-item"><b>Description: </b>{{$product_details->description}}</li>
+                                <li class="list-group-item"><b>SKU: </b>{{$product_details->SKU}}</li>
+                                <li class="list-group-item"><b>Status: </b>{{$product_details->stock_status}}</li>
+                                <li class="list-group-item"><b>Quantity: </b>{{$product_details->quantity}}</li>
+                                <li class="list-group-item"><b>View: </b>{{$product_details->view}}</li>
+                                <li class="list-group-item"><b>Origin: </b>{{$product_details->origin}}</li>
+                                <li class="list-group-item"><b>Weight: </b>{{$product_details->weight}}</li>
+                                <li class="list-group-item"><b>Dimension: </b>{{$product_details->Dimension}}</li>
+                                <li class="list-group-item"><b>Ram: </b>{{$product_details->ram}}</li>
+                                <li class="list-group-item"><b>Battery capacity: </b>{{$product_details->battery_capacity}}</li>
+                                <li class="list-group-item"><b>Color: </b>{{$product_details->color}}</li>
+                                <li class="list-group-item"><b>Network_connect: </b>{{$product_details->network_connect}}</li>
+                                <li class="list-group-item"><b>Operating system: </b>{{$product_details->operating_system}}</li>
+                                <li class="list-group-item"><b>Date created: </b>{{$product_details->created_at}}</li>
+                                <li class="list-group-item"><b>Update day: </b>{{$product_details->updated_at}}</li>
+                            </ul>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+        <!-- Modal Edit -->
+    <div wire:ignore.self class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                    <div class="modal-header bg-violet">
+                            <h5 class="modal-title text-light">Update product</h5>
+                                <button type="button" class="close" id="Edit_close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                        </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div >
+                            <form  action="" class="dropzone dz-clickable" id="image-upload"  method="post" wire:submit.prevent='update' enctype="multipart/form-data">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <input id="my-input" type="hidden" wire:model = 'ids' name="" value="">
+                                        <div class="form-group">
+                                        <label for="" class="text-muted">Name:</label>
+                                        <input type="text" name="name" wire:model='name' id="" class="form-control" placeholder="" aria-describedby="helpId">
+                                        @error('name')
+                                            <small id="helpId" class="text-danger">{{$message}}</small>
+                                        @enderror
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="" class="text-muted">Images:</label>
+                                            <div class="file-upload-inner ts-forms">
+                                                <div class="input prepend-big-btn">
+                                                    <label class="icon-right" for="prepend-big-btn">
+                                                            <i class="fa fa-download"></i>
+                                                        </label>
+                                                    <div class="file-button">
+                                                        Browse
+                                                        <input type="file" wire:model='file' onchange="document.getElementById('prepend-big-btn').value = this.value;">
+                                                    </div>
+                                                    <input type="text" id="prepend-big-btn" placeholder="">
+                                                </div>
+                                            </div>
+                                            @error('file')
+                                            <small id="helpId" class="text-danger">{{$message}}</small>
+                                            @enderror
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="" class="text-muted">Detailed image:</label>
+                                            <div class="file-upload-inner ts-forms">
+                                                <div class="input prepend-big-btn">
+                                                    <label class="icon-right" for="prepend-big-btn">
+                                                            <i class="fa fa-download"></i>
+                                                        </label>
+                                                    <div class="file-button">
+                                                        Browse
+                                                        <input type="file" wire:model='detail_image' onchange="document.getElementById('prepend-big-btn').value = this.value;" multiple>
+                                                    </div>
+                                                    <input type="text" id="prepend-big-btn" placeholder="">
+                                                </div>
+                                            </div>
+                                            @error('detail_image')
+                                            <small id="helpId" class="text-danger">{{$message}}</small>
+                                            @enderror
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="" class="text-muted">Slug</label>
+                                            <input type="text" name="slug" wire:model='slug' id="" class="form-control" placeholder="" aria-describedby="helpId">
+                                            @error('slug')
+                                            <small id="helpId" class="text-danger">{{$message}}</small>
+                                            @enderror
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="" class="text-muted">SKU</label>
+                                            <input type="text" name="sku" wire:model='sku' id="" class="form-control" placeholder="" aria-describedby="helpId">
+                                            @error('sku')
+                                            <small id="helpId" class="text-danger">{{$message}}</small>
+                                            @enderror
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="" class="text-muted">Quantity</label>
+                                            <input type="number" name="quantity" wire:model='quantity' id="" class="form-control" placeholder="" aria-describedby="helpId">
+                                            @error('quantity')
+                                            <small id="helpId" class="text-danger">{{$message}}</small>
+                                            @enderror
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="" class="text-muted">Short Desciption</label>
+                                            <input type="text" name="short_description" wire:model='short_description' id="" class="form-control" placeholder="" aria-describedby="helpId">
+                                            @error('short_description')
+                                            <small id="helpId" class="text-danger">{{$message}}</small>
+                                            @enderror
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="" class="text-muted">Desciption</label>
+                                              <textarea class="form-control" name="short_description" wire:model='description' id="" rows="3"></textarea>
+                                            @error('description')
+                                            <small id="helpId" class="text-danger">{{$message}}</small>
+                                            @enderror
+                                        </div>
+
+                                    </div>
+                                    <div class="col-lg-6">
+                                            <div class="form-group">
+                                            <label for="" class="text-muted">Orgin Price:</label>
+                                            <input type="number" name="origin_price" wire:model='origin_price' id="" class="form-control" placeholder="" aria-describedby="helpId">
+                                            @error('origin_price')
+                                                <small id="helpId" class="text-danger">{{$message}}</small>
+                                            @enderror
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="" class="text-muted">Sale Percent:</label>
+                                                <input type="number" name="sale_percent" wire:model='sale_percent' id="" class="form-control" placeholder="" aria-describedby="helpId">
+                                                @error('sale_percent')
+                                                    <small id="helpId" class="text-danger">{{$message}}</small>
+                                                @enderror
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="" class="text-muted">Category-{{$name}}</label>
+                                                <select class="form-control" wire:model = 'category_id' name="category_id" id="">
+                                                    <option value="" disable>Select Category</option>
+                                                    @foreach ($categories as $category)
+                                                        <option value="{{$category->id}}" {{ $category->id == $category_id ? 'selected' : '' }}>{{$category->name}}</option>
+                                                    @endforeach
+                                                </select>
+                                                @error('category_id')
+                                                <small id="helpId" class="text-danger">{{$message}}</small>
+                                                @enderror
+                                            </div>
+                                            @isset($category_id)
+                                            <div class="form-group">
+                                                <label for="" class="text-muted">Brand</label>
+                                                <select class="form-control" wire:model = 'manufacturer_id' name="manufacturer_id" id="">
+                                                    @foreach ($brands as $brand)
+                                                        <option value="{{$brand->id}}">{{$brand->name}}</option>
+                                                    @endforeach
+                                                </select>
+                                                @error('category_id')
+                                                <small id="helpId" class="text-danger">{{$message}}</small>
+                                                @enderror
+                                            </div>
+                                            @endisset
+                                            <div class="form-group">
+                                                <label for="" class="text-muted">Color:</label>
+                                                <select class="form-control" wire:model.defer = 'color' name="color" id="">
+                                                    <option value="">Select Color</option>
+                                                    <option value="Red">Red</option>
+                                                    <option value="Yellow">Yellow</option>
+                                                    <option value="Black">Black</option>
+                                                    <option value="White">White</option>
+                                                    <option value="Blue">Blue</option>
+                                                    <option value="Grey">Grey</option>
+                                                    <option value="Pink">Pink</option>
+                                            </select>
+                                                @error('color')
+                                                <small id="helpId" class="text-danger">{{$message}}</small>
+                                                @enderror
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="" class="text-muted">origin:</label>
+                                                <input type="text" name="origin" wire:model='origin' id="" class="form-control" placeholder="" aria-describedby="helpId">
+                                                @error('origin')
+                                                <small id="helpId" class="text-danger">{{$message}}</small>
+                                                @enderror
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="" class="text-muted">Weight:</label>
+                                                <input type="number" name="weight" wire:model='weight' id="" class="form-control" placeholder="" aria-describedby="helpId">
+                                                @error('weight')
+                                                <small id="helpId" class="text-danger">{{$message}}</small>
+                                                @enderror
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="" class="text-muted">Dimension:</label>
+                                                <input type="text" name="Dimension" wire:model='Dimension' id="" class="form-control" placeholder="" aria-describedby="helpId">
+                                                @error('Dimension')
+                                                <small id="helpId" class="text-danger">{{$message}}</small>
+                                                @enderror
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="" class="text-muted">Ram</label>
+                                                <select class="form-control" wire:model.defer = 'ram' name="ram" id="">
+                                                        <option value="">Select Ram</option>
+                                                        <option value="1">1Gb</option>
+                                                        <option value="2">2Gb</option>
+                                                        <option value="3">3Gb</option>
+                                                        <option value="4">4Gb</option>
+                                                        <option value="5">5Gb</option>
+                                                        <option value="6">6Gb</option>
+                                                </select>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="" class="text-muted">Operating system:</label>
+                                                <select class="form-control" wire:model.defer = 'operating_system' name="operating_system" id="">
+                                                        <option value="">Select OS</option>
+                                                        <option value="Android">Android</option>
+                                                        <option value="Blackberry OS">Blackberry OS</option>
+                                                        <option value="iOS">iOS</option>
+                                                        <option value="Windows Phone">Windows Phone</option>
+                                                        <option value="Windows">Windows</option>
+                                                        <option value="Mac OS">Mac OS</option>
+                                                        <option value="Linux">Linux</option>
+                                                </select>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="" class="text-muted">Network connect</label>
+                                                <select class="form-control" wire:model.defer = 'network_connect' name="operating_system" id="">
+                                                    <option value="">Select Network connect</option>
+                                                    <option value="Bluetooth">Bluetooth</option>
+                                                    <option value="4G">4G</option>
+                                                    <option value="5G">5G</option>
+                                                    <option value="Wifi">Wifi</option>
+                                                </select>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="" class="text-muted">Battery capacity</label>
+                                                <select class="form-control" wire:model.defer = 'battery_capacity' name="battery_capacity" id="">
+                                                    <option value="">Select Battery capacity</option>
+                                                    <option value="1000">1000 mah</option>
+                                                    <option value="2000">2000 mah</option>
+                                                    <option value="3000">3000 mah</option>
+                                                    <option value="4000">4000 mah</option>
+                                                    <option value="5000">5000 mah</option>
+                                                    <option value="6000">6000 mah</option>
+                                            </select>
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <input name="" id="" class="btn btn-primary btn-block" type="submit" value="Edit Product">
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+      <!-- Modal Add -->
+      <div wire:ignore.self   class="modal fade" id="modalAdd" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                    <div class="modal-header bg-info">
+                            <h5 class="modal-title">Create product</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -132,128 +407,239 @@
                     <div class="container-fluid">
                         <div >
                             <form  action="" class="dropzone dz-clickable" id="image-upload"  method="post" wire:submit.prevent='store' enctype="multipart/form-data">
-                                <div class="form-group">
-                                <label for="" class="text-muted">Name:</label>
-                                <input type="text" name="name" wire:model='name' id="" class="form-control" placeholder="" aria-describedby="helpId">
-                                @error('name')
-                                    <small id="helpId" class="text-danger">{{$message}}</small>
-                                @enderror
-                                </div>
-                                <div class="form-group">
-                                    <label for="" class="text-muted">Images:</label>
-                                    <input type="file" name="file" wire:model='file' id="file" class="form-control-file" placeholder="" aria-describedby="helpId">
-                                    @error('file')
-                                    <small id="helpId" class="text-danger">{{$message}}</small>
-                                    @enderror
-                                </div>
-                                <div class="form-group">
-                                    <label for="" class="text-muted">Slug</label>
-                                    <input type="text" name="slug" wire:model='slug' id="" class="form-control" placeholder="" aria-describedby="helpId">
-                                    @error('slug')
-                                    <small id="helpId" class="text-danger">{{$message}}</small>
-                                    @enderror
-                                </div>
-                                <div class="form-group">
-                                    <label for="" class="text-muted">Category Sliders</label>
-                                    <input type="file" name="file_banner" wire:model='file_banner' multiple id="" class="form-control-file" placeholder="" aria-describedby="helpId">
-                                    @error('file_banner')
-                                    <small id="helpId" class="text-danger">{{$message}}</small>
-                                    @enderror
-                                </div>
-                                <div class="form-group">
-                                    <label for="" class="text-muted">Brand</label>
-                                      <select class="form-control" wire:model = 'brand' name="" id="" multiple>
-                                        @foreach ($brands as $brand)
-                                            <option value="{{$brand->id}}">{{$brand->name}}</option>
-                                        @endforeach
-                                      </select>
-                                    @error('brand')
-                                    <small id="helpId" class="text-danger">{{$message}}</small>
-                                    @enderror
-                                </div>
-                                <div class="form-group">
-                                    <input name="" id="" class="btn btn-primary" type="submit" value="Add">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                        <label for="" class="text-muted">Name:</label>
+                                        <input type="text" name="name" wire:model.defer='name' id="" class="form-control" placeholder="" aria-describedby="helpId">
+                                        @error('name')
+                                            <small id="helpId" class="text-danger">{{$message}}</small>
+                                        @enderror
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="" class="text-muted">Images:</label>
+                                            <div class="file-upload-inner ts-forms">
+                                                <div class="input prepend-big-btn">
+                                                    <label class="icon-right" for="prepend-big-btn">
+                                                            <i class="fa fa-download"></i>
+                                                        </label>
+                                                    <div class="file-button">
+                                                        Browse
+                                                        <input type="file" wire:model.defer='file' accept="image/*" onchange="loadFile(event)">
+                                                    </div>
+                                                    <input type="text" id="prepend-big-btn" placeholder="">
+                                                </div>
+                                                <img id="output"/>
+                                            </div>
+                                            @error('file')
+                                            <small id="helpId" class="text-danger">{{$message}}</small>
+                                            @enderror
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="" class="text-muted">Detailed image:</label>
+                                            <div class="file-upload-inner ts-forms">
+                                                <div class="input prepend-big-btn">
+                                                    <label class="icon-right" for="prepend-big-btn">
+                                                            <i class="fa fa-download"></i>
+                                                        </label>
+                                                    <div class="file-button">
+                                                        Browse
+                                                        <input type="file" wire:model.defer='detail_image' onchange="document.getElementById('prepend-big-btn').value = this.value;" multiple>
+                                                    </div>
+                                                    <input type="text" id="prepend-big-btn" placeholder="">
+                                                </div>
+                                            </div>
+                                            @error('detail_image')
+                                            <small id="helpId" class="text-danger">{{$message}}</small>
+                                            @enderror
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="" class="text-muted">Slug</label>
+                                            <input type="text" name="slug" wire:model.defer='slug' id="" class="form-control" placeholder="" aria-describedby="helpId">
+                                            @error('slug')
+                                            <small id="helpId" class="text-danger">{{$message}}</small>
+                                            @enderror
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="" class="text-muted">SKU</label>
+                                            <input type="text" name="sku" wire:model.defer='sku' id="" class="form-control" placeholder="" aria-describedby="helpId">
+                                            @error('sku')
+                                            <small id="helpId" class="text-danger">{{$message}}</small>
+                                            @enderror
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="" class="text-muted">Quantity</label>
+                                            <input type="number" name="quantity" wire:model.defer='quantity' id="" class="form-control" placeholder="" aria-describedby="helpId">
+                                            @error('quantity')
+                                            <small id="helpId" class="text-danger">{{$message}}</small>
+                                            @enderror
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="" class="text-muted">Short Desciption</label>
+                                            <input type="text" name="short_description" wire:model.defer='short_description' id="" class="form-control" placeholder="" aria-describedby="helpId">
+                                            @error('short_description')
+                                            <small id="helpId" class="text-danger">{{$message}}</small>
+                                            @enderror
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="" class="text-muted">Desciption</label>
+                                              <textarea class="form-control" name="short_description" wire:model.defer='description' id="" rows="3"></textarea>
+                                            @error('description')
+                                            <small id="helpId" class="text-danger">{{$message}}</small>
+                                            @enderror
+                                        </div>
+
+                                    </div>
+                                    <div class="col-lg-6">
+                                            <div class="form-group">
+                                            <label for="" class="text-muted">Orgin Price:</label>
+                                            <input type="number" name="origin_price" wire:model.defer='origin_price' id="" class="form-control" placeholder="" aria-describedby="helpId">
+                                            @error('origin_price')
+                                                <small id="helpId" class="text-danger">{{$message}}</small>
+                                            @enderror
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="" class="text-muted">Sale Percent:</label>
+                                                <input type="number" name="sale_percent" wire:model.defer='sale_percent' id="" class="form-control" placeholder="" aria-describedby="helpId">
+                                                @error('sale_percent')
+                                                    <small id="helpId" class="text-danger">{{$message}}</small>
+                                                @enderror
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="" class="text-muted">Category</label>
+                                                <select class="form-control" wire:model.lazy = 'category_id' name="category_id" id="">
+                                                    @foreach ($categories as $category)
+                                                        <option value="{{$category->id}}">{{$category->name}}</option>
+                                                    @endforeach
+                                                </select>
+                                                @error('category_id')
+                                                <small id="helpId" class="text-danger">{{$message}}</small>
+                                                @enderror
+                                            </div>
+                                            @if(isset($category_id))
+                                            <div class="form-group">
+                                                <label for="" class="text-muted">Brand</label>
+                                                <select class="form-control" wire:model = 'manufacturer_id' name="manufacturer_id" id="">
+                                                    @foreach ($brands as $brand)
+                                                        <option value="{{$brand->id}}">{{$brand->name}}</option>
+                                                    @endforeach
+                                                </select>
+                                                @error('category_id')
+                                                <small id="helpId" class="text-danger">{{$message}}</small>
+                                                @enderror
+                                            </div>
+                                            @endif
+                                            <div class="form-group">
+                                                <label for="" class="text-muted">Color:</label>
+                                                <select class="form-control" wire:model.defer = 'color' name="color" id="">
+                                                    <option value="">Select Color</option>
+                                                    <option value="Red">Red</option>
+                                                    <option value="Yellow">Yellow</option>
+                                                    <option value="Black">Black</option>
+                                                    <option value="White">White</option>
+                                                    <option value="Blue">Blue</option>
+                                                    <option value="Grey">Grey</option>
+                                                    <option value="Pink">Pink</option>
+                                            </select>
+                                                @error('color')
+                                                <small id="helpId" class="text-danger">{{$message}}</small>
+                                                @enderror
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="" class="text-muted">origin:</label>
+                                                <input type="text" name="origin" wire:model.defer='origin' id="" class="form-control" placeholder="" aria-describedby="helpId">
+                                                @error('origin')
+                                                <small id="helpId" class="text-danger">{{$message}}</small>
+                                                @enderror
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="" class="text-muted">Weight:</label>
+                                                <input type="number" name="weight" wire:model.defer='weight' id="" class="form-control" placeholder="" aria-describedby="helpId">
+                                                @error('weight')
+                                                <small id="helpId" class="text-danger">{{$message}}</small>
+                                                @enderror
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="" class="text-muted">Dimension:</label>
+                                                <input type="text" name="Dimension" wire:model.defer='Dimension' id="" class="form-control" placeholder="" aria-describedby="helpId">
+                                                @error('Dimension')
+                                                <small id="helpId" class="text-danger">{{$message}}</small>
+                                                @enderror
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="" class="text-muted">Ram</label>
+                                                <select class="form-control" wire:model.defer = 'ram' name="ram" id="">
+                                                        <option value="">Select Ram</option>
+                                                        <option value="1">1Gb</option>
+                                                        <option value="2">2Gb</option>
+                                                        <option value="3">3Gb</option>
+                                                        <option value="4">4Gb</option>
+                                                        <option value="5">5Gb</option>
+                                                        <option value="6">6Gb</option>
+                                                </select>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="" class="text-muted">Operating system:</label>
+                                                <select class="form-control" wire:model.defer = 'operating_system' name="operating_system" id="">
+                                                        <option value="">Select OS</option>
+                                                        <option value="Android">Android</option>
+                                                        <option value="Blackberry OS">Blackberry OS</option>
+                                                        <option value="iOS">iOS</option>
+                                                        <option value="Windows Phone">Windows Phone</option>
+                                                        <option value="Windows">Windows</option>
+                                                        <option value="Mac OS">Mac OS</option>
+                                                        <option value="Linux">Linux</option>
+                                                </select>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="" class="text-muted">Network connect</label>
+                                                <select class="form-control" wire:model.defer = 'network_connect' name="operating_system" id="">
+                                                    <option value="">Select Network connect</option>
+                                                    <option value="Bluetooth">Bluetooth</option>
+                                                    <option value="4G">4G</option>
+                                                    <option value="5G">5G</option>
+                                                    <option value="Wifi">Wifi</option>
+                                                </select>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="" class="text-muted">Battery capacity</label>
+                                                <select class="form-control" wire:model.defer = 'ram' name="ram" id="">
+                                                    <option value="">Select Battery capacity</option>
+                                                    <option value="1000">1000 mah</option>
+                                                    <option value="2000">2000 mah</option>
+                                                    <option value="3000">3000 mah</option>
+                                                    <option value="4000">4000 mah</option>
+                                                    <option value="5000">5000 mah</option>
+                                                    <option value="6000">6000 mah</option>
+                                            </select>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input name="" id="" class="btn btn-primary btn-block" type="submit" value="Create Product">
+                                    </div>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Modal Edit -->
-    <div wire:ignore.self class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                    <div class="modal-header bg-violet text-light">
-                            <h5 class="modal-title text-dark" >Update Category</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                        </div>
-                <div class="modal-body">
-                    <div class="container-fluid">
-                        <form  action="" method="post" wire:submit.prevent='update' enctype="multipart/form-data" id="form1" runat="server">
-                            <input id="my-input" type="hidden" wire:model = 'ids' name="" value="">
-                            <div class="form-group">
-                              <label for="" class="text-muted">Name:</label>
-                              <input type="text" name="name" wire:model='name' id="" class="form-control" placeholder="" aria-describedby="helpId">
-                              @error('name')
-                                <small id="helpId" class="text-danger">{{$message}}</small>
-                              @enderror
-                            </div>
-                            <div class="form-group">
-                                <label for="" class="text-muted">Images:</label>
-                                <input type="file" name="file" wire:model = 'file' id="imgInp" class="form-control-file" placeholder="" aria-describedby="helpId" oninput="pic.src=window.URL.createObjectURL(this.files[0])">
-                                <img id="pic" />
-                                @error('file')
-                                <small id="helpId" class="text-danger">{{$message}}</small>
-                                @enderror
-                            </div>
-                            <div class="form-group">
-                                <label for="" class="text-muted">Slug</label>
-                                <input type="text" name="slug" wire:model='slug' id="" class="form-control" placeholder="" aria-describedby="helpId">
-                                @error('slug')
-                                <small id="helpId" class="text-danger">{{$message}}</small>
-                                @enderror
-                            </div>
-                            <div class="form-group">
-                                <label for="" class="text-muted">Category Sliders</label>
-                                <input type="file" name="file_banner" wire:model='file_banner' multiple id="" class="form-control-file" placeholder="" aria-describedby="helpId">
-                                @error('file_banner')
-                                <small id="helpId" class="text-danger">{{$message}}</small>
-                                @enderror
-                            </div>
-                            <div class="form-group">
-                                <label for="" class="text-muted">Brand</label>
-                                  <select class="form-control" wire:model = 'brand' name="" id="" multiple>
-                                    @foreach ($brands as $brand)
-                                        <option value="{{$brand->id}}">{{$brand->name}}</option>
-                                    @endforeach
-                                  </select>
-                                @error('brand')
-                                <small id="helpId" class="text-danger">{{$message}}</small>
-                                @enderror
-                            </div>
-                            <div class="form-group">
-                                <input name="" id="" class="btn btn-primary" type="submit" value="Add">
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save</button>
-                </div>
             </div>
         </div>
     </div>
 </div>
-<div dropzone="copy"></div>
+<script>
+  var loadFile = function(event) {
+    var output = document.getElementById('output');
+    output.src = URL.createObjectURL(event.target.files[0]);
+    output.onload = function() {
+      URL.revokeObjectURL(output.src) // free memory
+    }
+  };
+</script>
 <script>
     document.addEventListener('DOMContentLoaded', function(){
         var imgs = document.querySelectorAll('img');
@@ -262,3 +648,4 @@
         });
     });
 </script>
+

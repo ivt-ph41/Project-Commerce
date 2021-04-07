@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\User;
 
 use App\Models\Discount;
+use App\Models\Slider;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -17,6 +18,7 @@ class UserVoucherComponent extends Component
     public function render()
     {
         $vouchers = Discount::with('discount_users')->get();
-        return view('livewire.user.user-voucher-component',compact('vouchers'))->layout('layouts.base');
+        $voucher_sliders = Slider::where('type',1)->get();
+        return view('livewire.user.user-voucher-component',compact('vouchers','voucher_sliders'))->layout('layouts.base');
     }
 }

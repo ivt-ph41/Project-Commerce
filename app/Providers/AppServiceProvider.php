@@ -41,7 +41,7 @@ class AppServiceProvider extends ServiceProvider
         view()->composer(['livewire.home','livewire.user-dashboard-component','livewire.shop','livewire.detail-product-component','livewire.brand-component'], function ($view) {
             $view->with('popular_product', Product::orderBy('view','DESC')->paginate(5));
         });
-        view()->composer(['livewire.home','livewire.user-dashboard-component','livewire.shop','livewire.detail-product-component','livewire.brand-component','livewire.admin.category-component','livewire.admin.admin-product-component'], function ($view) {
+        view()->composer(['livewire.home','livewire.user-dashboard-component','livewire.shop','livewire.detail-product-component','livewire.brand-component','livewire.admin.category-component'], function ($view) {
             $view->with('brands', Manufacturer::all());
         });
     }

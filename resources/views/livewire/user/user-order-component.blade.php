@@ -21,6 +21,10 @@
                           <span class="badge badge-primary badge-pill">2</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <a class="text-dark" href="{{route('user.my-voucher')}}" ><b>My Voucher</b></a>
+                          <span class="badge badge-primary badge-pill">2</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
                             <a class="text-dark" href="" ><b>Favorite products</b></a>
                           <span class="badge badge-primary badge-pill">1</span>
                         </li>
@@ -57,7 +61,7 @@
                                         <span class="text-info">{{$order->status}}</span>
                                     @endif
                                 </th>
-                                <th>Total: <span class="text-info">{{$order->total}} VNĐ</span></th>
+                                <th>Total: <span class="text-info">{{number_format($order->total)}} VNĐ</span></th>
                                 <th>
                                     <a title='cancel order' onclick=" return confirm('You definitely want to cancel this order')" wire:click.prevent = 'cancel({{$order->id}})'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
                                         <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
@@ -69,9 +73,9 @@
                             @foreach ($order->order_items as $order_item)
                             <tr>
                                 <td><b>{{App\Models\Product::where('id',$order_item->product_id)->first()->name}}</b></td>
-                                <td><img src="{{asset('Commerce/assets/images/products/'.App\Models\Product::where('id',$order_item->product_id)->first()->image)}}" width=50 height=50 alt='The product has stopped selling at the store' ></td>
+                                <td><img src="{{asset('storage/'.App\Models\Product::where('id',$order_item->product_id)->first()->image)}}" width=50 height=50 alt='The product has stopped selling at the store' ></td>
                                 <td>Qty: <span class="text-muted">{{$order_item->quantity}}</span></td>
-                                <td><span class="text-muted">{{$order_item->price}} VNĐ</span></td>
+                                <td><span class="text-muted">{{number_format($order_item->price)}} VNĐ</span></td>
                             </tr>
                             @endforeach
                         </tbody>

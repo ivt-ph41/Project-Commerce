@@ -13,38 +13,35 @@
                     <div class="topbar-menu right-menu">
                         <ul>
                             <li class="menu-item menu-item-has-children parent" >
-                                <a href="" class="link-term mercado-item-title">About Us</a>
+                                <a href="" class="link-term mercado-item-title">{{ trans('messages.US') }}</a>
                             </li>
                             <li class="menu-item menu-item-has-children parent" >
-                                <a href="{{ route('shop') }}" class="link-term mercado-item-title">Shop</a>
+                                <a href="{{ route('shop') }}" class="link-term mercado-item-title">{{ trans('messages.Shop') }}</a>
                             </li>
                             <li class="menu-item menu-item-has-children parent" >
-                                <a href="{{ route('product.cart') }}" class="link-term mercado-item-title">Cart</a>
+                                <a href="{{ route('product.cart') }}" class="link-term mercado-item-title">{{ trans('messages.Cart') }}</a>
                             </li>
                             <li class="menu-item menu-item-has-children parent" >
-                                <a href="{{ route('check-out') }}" class="link-term mercado-item-title">Checkout</a>
+                                <a href="{{ route('check-out') }}" class="link-term mercado-item-title">{{ trans('messages.Checkout') }}</a>
                             </li>
                             <li class="menu-item menu-item-has-children parent" >
-                                <a href="{{ route('user.chat') }}" class="link-term mercado-item-title">Chat<span class="badge badge-pill badge-primary">1</span></a>
+                                <a href="{{ route('user.chat') }}" class="link-term mercado-item-title">{{ __('Chat') }}<span class="badge badge-pill badge-primary">1</span></a>
                             </li>
                             <li class="menu-item menu-item-has-children parent" >
-                                <a href="{{ route('contact') }}" class="link-term mercado-item-title">Contact Us</a>
+                                <a href="{{ route('contact') }}" class="link-term mercado-item-title">{{ trans('messages.Contact') }}</a>
                             </li>
-
                             <li class="menu-item lang-menu menu-item-has-children parent">
-                                <a title="English" href="#"><span class="img label-before"><img src="{{asset('Commerce/assets/images/lang-en.png')}}" alt="lang-en"></span>English<i class="fa fa-angle-down" aria-hidden="true"></i></a>
+                                <a title="English" href="{!! route('user.change-language', ['en']) !!}"><span class="img label-before"><img src="{{asset('Commerce/assets/images/lang-en.png')}}" alt="lang-en"></span>English<i class="fa fa-angle-down" aria-hidden="true"></i></a>
                                 <ul class="submenu lang" >
-                                    <li class="menu-item" ><a title="hungary" href="#"><span class="img label-before"><img src="{{asset('Commerce/assets/images/lang-hun.png')}}" alt="lang-hun"></span>Hungary</a></li>
-                                    <li class="menu-item" ><a title="german" href="#"><span class="img label-before"><img src="{{asset('Commerce/assets/images/lang-ger.png')}}" alt="lang-ger" ></span>German</a></li>
-                                    <li class="menu-item" ><a title="french" href="#"><span class="img label-before"><img src="{{asset('Commerce/assets/images/lang-fra.png')}}" alt="lang-fre"></span>French</a></li>
-                                    <li class="menu-item" ><a title="canada" href="#"><span class="img label-before"><img src="{{asset('Commerce/assets/images/lang-can.png')}}" alt="lang-can"></span>Canada</a></li>
+                                    <li class="menu-item text-dark" ><a title="Tiếng Việt" href="{!! route('user.change-language', ['vi']) !!}"><span class="img label-before"><img src="{{asset('Commerce/assets/images/lang-hun.png')}}" alt="lang-hun"></span>Tiếng Việt</a></li>
+
                                 </ul>
                             </li>
                             @if (Route::has('login'))
                                 @auth
                                     @if (Auth::user()->utype=='ADM')
                                     <li class="menu-item menu-item-has-children parent" >
-                                        <a title="Dollar (USD)" href="#">My Acount: {{ Auth::user()->name }}<i class="fa fa-angle-down" aria-hidden="true"></i></a>
+                                        <a title="Dollar (USD)" href="#">{{ trans('messages.My_Acount') }}: {{ Auth::user()->name }}<i class="fa fa-angle-down" aria-hidden="true"></i></a>
                                         <ul class="submenu curency" >
                                             <li class="menu-item" >
                                                 <a title="Pound (GBP)" class="btn btn-warning btn-block" href="{{ route('admin.dashboard') }}">Home</a>
@@ -62,7 +59,7 @@
                                     </li>
                                     @else
                                         <li class="menu-item menu-item-has-children parent" >
-                                            <a title="Dollar (USD)" href="#">My Acount: {{ Auth::user()->name }}<i class="fa fa-angle-down" aria-hidden="true"></i></a>
+                                            <a title="Dollar (USD)" href="#">{{ trans('messages.My_Acount') }}: {{ Auth::user()->name }}<i class="fa fa-angle-down" aria-hidden="true"></i></a>
                                             <ul class="submenu curency" >
                                                 <li class="menu-item" >
                                                     <a title="Pound (GBP)" class="btn btn-warning btn-sm btn-block" href="{{ route('user.dashboard') }}">Home</a>
@@ -83,8 +80,8 @@
                                         </li>
                                     @endif
                                 @else
-                                    <li class="menu-item" ><a title="Register or Login" href="{{ route('login') }}">Login</a></li>
-                                    <li class="menu-item" ><a title="Register or Login" href="{{ route('register') }}">Register</a></li>
+                                    <li class="menu-item" ><a title="Register or Login" href="{{ route('login') }}">{{ trans('messages.Login') }}</a></li>
+                                    <li class="menu-item" ><a title="Register or Login" href="{{ route('register') }}">{{ trans('messages.Register') }}</a></li>
                                 @endif
                             @endif
                         </ul>
@@ -106,9 +103,9 @@
                                 <button form="form-search-top" type="button"><i class="fa fa-search" aria-hidden="true"></i></button>
                                 <div class="wrap-list-cate">
                                     <input type="hidden" name="product-cate" value="0" id="product-cate">
-                                    <a href="#" class="link-control">All Category</a>
+                                    <a href="#" class="link-control">{{ trans('messages.All_category') }}</a>
                                     <ul class="list-cate">
-                                        <li class="level-0">All Category</li>
+                                        <li class="level-0">{{ trans('messages.All_category') }}</li>
                                         @foreach ($categories as $category)
                                         <li class="level-1"><a class="text-muted" href="{{route('category.product',['slug_cat' => $category->slug])}}">{{$category->name}}</a></li>
                                         @endforeach
@@ -124,7 +121,7 @@
                                 <i class="fa fa-heart" aria-hidden="true"></i>
                                 <div class="left-info">
                                     <span class="index">0 item</span>
-                                    <span class="title">Wishlist</span>
+                                    <span class="title">{{ trans('messages.WishList') }}</span>
                                 </div>
                             </a>
                         </div>
@@ -135,7 +132,7 @@
                                     @if (Cart::count() >0)
                                     <span class="index">{{Cart::count()}} items</span>
                                     @endif
-                                    <span class="title">CART</span>
+                                    <span class="title">{{ trans('messages.Cart') }}</span>
                                 </div>
                             </a>
                         </div>
@@ -155,10 +152,10 @@
                 <div class="nav-section header">
                     <div class="header-nav-section ">
                             <ul class="nav menu-nav clone-main-menu " id="mercado_haead_menu" data-menuname="Sale Info" >
-                                <li class="menu-item"><a href="#" class="link-term">Weekly Featured</a><span class="nav-label hot-label">hot</span></li>
-                                <li class="menu-item"><a href="{{route('user.voucher')}}" class="link-term">Voucher</a><span class="nav-label hot-label">hot</span></li>
-                                <li class="menu-item"><a href="#" class="link-term">Top new items</a><span class="nav-label hot-label">hot</span></li>
-                                <li class="menu-item"><a href="#" class="link-term">Top Selling</a><span class="nav-label hot-label">hot</span></li>
+                                <li class="menu-item"><a href="#" class="link-term">{{ trans('messages.Weekly_Featured') }}</a><span class="nav-label hot-label">hot</span></li>
+                                <li class="menu-item"><a href="{{route('user.voucher')}}" class="link-term">{{ trans('messages.Voucher') }}</a><span class="nav-label hot-label">hot</span></li>
+                                <li class="menu-item"><a href="#" class="link-term">{{ trans('messages.Top_new_items') }}</a><span class="nav-label hot-label">hot</span></li>
+                                <li class="menu-item"><a href="#" class="link-term">{{ trans('messages.Top_Selling') }}</a><span class="nav-label hot-label">hot</span></li>
                                 <li class="menu-item"><a href="#" class="link-term">Top rated items</a><span class="nav-label hot-label">hot</span></li>
                             </ul>
                     </div>

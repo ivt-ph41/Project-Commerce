@@ -4,11 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Manufacturer extends Model
 {
     use HasFactory;
+    use SoftDeletes;
     protected $table = 'manufacturer';
+    protected $fillable = ['id','name','address','slug','status','deleted_at','created_at','updated_at'];
    /**
     * Get all of the comments for the Manufacturer
     *

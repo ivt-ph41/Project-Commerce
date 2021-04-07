@@ -78,6 +78,9 @@
     <!-- Zôm-image -->
     <link rel="stylesheet" type="text/css" href="{{asset('Admintle/css/zoom_img.css')}}">
     <script  src = "https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+      <!-- summernote CSS
+		============================================ -->
+        <link rel="stylesheet" href="{{asset('Admintle/css/summernote/summernote.css')}}">
     @livewireStyles
 </head>
 
@@ -175,5 +178,8 @@
         <!-- Latest compiled JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous"></script>
+
+        <script src="{{asset('Admintle/js/summernote/summernote.min.js')}}"></script>
+        <script src="{{asset('Admintle/js/summernote/summernote-active.js')}}"></script>
 </body>
 </html>

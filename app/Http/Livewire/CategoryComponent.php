@@ -16,6 +16,8 @@ class CategoryComponent extends Component
     public $slug_cat;
     public $SelectColor = [];
     public $SelectRam = [];
+    public $SelectOS = [];
+    public $Battery = [];
     public $price_start;
     public $price_end;
     public $search;
@@ -56,6 +58,12 @@ class CategoryComponent extends Component
         }
         if($this->SelectRam != Null){
             $products = Products::with('product_images')->where('category_id',$category->id)->whereIn('ram',$this->SelectRam)->paginate(20);
+        }
+        if($this->SelectOS != Null){
+            $products = Products::with('product_images')->where('category_id',$category->id)->whereIn('operating_system',$this->SelectOS)->paginate(20);
+        }
+        if($this->Battery != Null){
+            $products = Products::with('product_images')->where('category_id',$category->id)->whereIn('battery_capacity',$this->Battery)->paginate(20);
         }
         if($this->price_start >0 && $this->price_end >0){
             $products = Products::with('product_images')->where('category_id',$category->id)->whereBetween('regular_price', [$this->price_start, $this->price_end])

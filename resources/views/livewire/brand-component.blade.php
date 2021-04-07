@@ -26,7 +26,7 @@
                                         <?php if ($i==0) {$set_ = 'active'; } else {$set_ = ''; } ?>
                                             <div class='carousel-item <?php echo $set_; ?>'>
                                                 <a href="#" class="banner-link">
-                                                    <figure><img src="{{asset('Commerce/assets/images/brand_sliders/'.$item->images)}}" alt="{{$item->images}}" class='d-block w-100'></figure>
+                                                    <figure><img src="{{asset('storage/'.$item->images)}}" alt="{{$item->images}}" class='d-block w-100'></figure>
                                                 </a>
                                             </div>
                                         <?php $i++; endforeach ?>
@@ -91,32 +91,35 @@
 								<div class="product product-style-3 equal-elem card">
 									<div class="product-thumnail">
 										<a href="{{route('product.detail',['slug' =>$product->slug ])}}" title="{{$product->name}}">
-											<figure><img src="{{asset('Commerce/assets/images/products/'.$product->image)}}" alt="{{ $product->image }}"></figure>
+											<figure><img src="{{asset('storage/'.$product->image)}}" alt="{{ $product->image }}"></figure>
 										</a>
+                                        @if($product->sale_percent > 0)
+                                                <span class="badge badge-pill badge-primary" style="z-index:2;position:absolute;top:10px;left:10px">- {{$product->sale_percent}} %</span>
+                                        @endif
 									</div>
                                     @php
-                                        $date = strtotime($product->updated_at);
-                                        $day_update = date('Y-m-d h:i:sa', $date) ;
-                                        $date_now = date('Y-m-d H:i:s') ; //current date
-                                        $days = (strtotime($date_now) - strtotime($day_update)) / (60 * 60 * 24);
+                                    $date = strtotime($product->created_at);
+                                    $day_create = date('Y-m-d h:i:sa', $date) ;
+                                    $date_now = date('Y-m-d H:i:s') ; //current date
+                                    $days = (strtotime($date_now) - strtotime($day_create)) / (60 * 60 * 24);
                                     @endphp
                                     @if ($days<5)
-                                        <span class="badge badge-lg badge-danger" style="z-index:10">new</span>
+                                        <span class="badge badge-lg badge-danger" style="z-index:2;position:absolute;top:10px;right:10px">new</span>
                                     @endif
 									<div class="product-info">
 										<a href="#" class="product-name"><span>{{$product->name}}</span></a>
-										<div class="wrap-price"><span class="product-price text-orange">{{$product->regular_price}}</span></div>
+										<div class="wrap-price"><span class="product-price text-warning">{{number_format($product->regular_price)}} VNĐ</span></div>
                                         <div id="carouselId" class="carousel slide" data-ride="carousel">
                                             <div class="carousel-inner" role="listbox">
                                                 <div class="carousel-item active">
                                                     <a href="{{route('product.detail',['slug' =>$product->slug ])}}" title="{{$product->name}}">
-                                                        <img class="border border-info" width="30" height="30" src="{{asset('Commerce/assets/images/products/'.$product->image)}}" alt="First slide">
+                                                        <img class="border border-info" width="30" height="30" src="{{asset('storage/'.$product->image)}}" alt="First slide">
                                                     </a>
                                                 </div>
                                                 @foreach ($product->product_images as $images)
                                                     <div class="carousel-item">
                                                         <a href="{{route('product.detail',['slug' =>$product->slug ])}}" title="{{$product->name}}">
-                                                            <img class="border border-warning" width="30" height="30" src="{{asset('Commerce/assets/images/products/'.$images->images)}}" alt="First slide">
+                                                            <img class="border border-warning" width="30" height="30" src="{{asset('storage/'.$images->images)}}" alt="First slide">
                                                         </a>
                                                     </div>
                                                 @endforeach
@@ -222,6 +225,38 @@
 						</div>
 					</div><!-- Color -->
                     @endif
+                    @if (isset($SelectOS))
+                    <div class="widget mercado-widget filter-widget">
+						<h2 class="widget-title">Operating system</h2>
+						<div class="widget-content">
+							<ul class="list-style vertical-list has-count-index">
+								<li class="text-muted "><input class="" wire:model='SelectOS' type="checkbox" name="" value="Android"> Android</li>
+								<li class="text-muted list-item"><input class="" wire:model='SelectOS' type="checkbox" name="" value="Blackberry OS"> Blackberry OS</li>
+								<li class="text-muted list-item"><input class="" wire:model='SelectOS' type="checkbox" name="" value="iOS"> iOS</li>
+								<li class="text-muted list-item"><input class="" wire:model='SelectOS' type="checkbox" name="" value="Windows Phone"> Windows Phone</li>
+								<li class="text-muted list-item"><input class="" wire:model='SelectOS' type="checkbox" name="" value="Windows"> Windows</li>
+								<li class="text-muted list-item"><input class="" wire:model='SelectOS' type="checkbox" name="" value="Mac OS"> Mac OS</li>
+                                <li class="text-muted list-item"><input class="" wire:model='SelectOS' type="checkbox" name="" value="Linux"> Linux</li>
+							</ul>
+						</div>
+					</div><!-- OS -->
+                    @endif
+                    @if (isset($Battery))
+                    <div class="widget mercado-widget filter-widget">
+						<h2 class="widget-title">Battery capacity</h2>
+						<div class="widget-content">
+							<ul class="list-style vertical-list has-count-index">
+								<li class="text-muted "><input class="" wire:model='Battery' type="checkbox" name="" value="1000"> 1000 mah</li>
+								<li class="text-muted"><input class="" wire:model='Battery' type="checkbox" name="" value="2000"> 2000 mah</li>
+								<li class="text-muted"><input class="" wire:model='Battery' type="checkbox" name="" value="3000"> 3000 mah</li>
+								<li class="text-muted"><input class="" wire:model='Battery' type="checkbox" name="" value="4000"> 4000 mah</li>
+								<li class="text-muted"><input class="" wire:model='Battery' type="checkbox" name="" value="5000"> 5000 mah</li>
+								<li class="text-muted"><input class="" wire:model='Battery' type="checkbox" name="" value="6000"> 6000 mah</li>
+                                <li class="text-muted"><input class="" wire:model='Battery' type="checkbox" name="" value="7000"> 7000 mah</li>
+							</ul>
+						</div>
+					</div><!-- OS -->
+                    @endif
 					<div class="widget mercado-widget filter-widget">
 						<h2 class="widget-title">Size</h2>
 						<div class="widget-content">
@@ -246,7 +281,7 @@
 									<div class="product product-widget-style">
 										<div class="thumbnnail">
 											<a href="{{ route('product.detail',['slug' =>$item->slug]) }}" title="Radiant-360 R6 Wireless Omnidirectional Speaker [White]">
-												<figure><img src="{{asset('Commerce/assets/images/products/'.$item->image)}}" alt=""></figure>
+												<figure><img src="{{asset('storage/'.$item->image)}}" alt=""></figure>
 											</a>
 										</div>
 										<div class="product-info">

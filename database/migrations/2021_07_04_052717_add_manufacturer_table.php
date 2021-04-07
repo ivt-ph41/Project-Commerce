@@ -14,7 +14,9 @@ class AddManufacturerTable extends Migration
     public function up()
     {
         Schema::table('manufacturer', function (Blueprint $table) {
-            $table->string('slug');
+            $table->string('status')->default('enable');
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 

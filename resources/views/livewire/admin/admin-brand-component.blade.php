@@ -66,20 +66,19 @@
                             <th></th>
                             <th class="text-center">ID</th>
                             <th class="text-center">Name</th>
-                            <th class="text-center">Image</th>
+                            <th class="text-center">Address</th>
                             <th class="text-center">Slider Images</th>
-                            <th class="text-center">Brands</th>
                             <th class="text-center">Status</th>
                             <th colspan="2" class="text-center">Action</th>
                         </tr>
                 </thead>
                 <tbody>
-                    @foreach ($categories as $category)
+                    @foreach ($brands as $brand)
                             <tr>
-                                <td class="text-center"><input type="checkbox" wire:model.defer = 'SelectDelete' value='{{$category->id}}' ></td>
-                                <td class="text-center" scope="row">{{$category->id}}</td>
-                                <td class="text-center">{{$category->name}}</td>
-                                <td class="text-center"><img width="50" height="50" src="{{asset('storage/'.$category->image)}}" alt="{{$category->image}}"></td>
+                                <td class="text-center"><input type="checkbox" wire:model.defer = 'SelectDelete' value='{{$brand->id}}' ></td>
+                                <td class="text-center" scope="row">{{$brand->id}}</td>
+                                <td class="text-center">{{$brand->name}}</td>
+                                <td class="text-center">{{$brand->address}}</td>
                                 <td class="text-center">
                                     <div class="form-group">
                                         <div class="dropdown">
@@ -88,37 +87,31 @@
                                             </button>
                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 
-                                                @foreach ($category->category_sliders as $category_slider)
-                                                <a class="dropdown-item" href="#"><img src="{{asset('storage/'.$category_slider->images)}}" width="1170" height="240" alt="{{$category_slider->images}}"></a>
+                                                @foreach ($brand->brand_sliders as $brand_slider)
+                                                <a class="dropdown-item" href="#"><img src="{{asset('storage/'.$brand_slider->images)}}" width="1170" height="240" alt="{{$brand_slider->images}}"></a>
                                                 @endforeach
 
                                             </div>
                                           </div>
                                     </div>
-                                <td>
-                                      <select class="form-control" name="" id="">
-                                        @foreach ($category->cate_manus as $item)
-                                            <option value="">{{$item->name}}</option>
-                                        @endforeach
-                                      </select>
                                 </td>
                                 <td class="text-center">
-                                    @if ($category->status=='enable')
-                                        <a name="" id="" wire:click.prevent='status({{$category->id}})' class="btn btn-success" href="#" role="button">{{$category->status}}</a>
+                                    @if ($brand->status=='enable')
+                                        <a name="" id="" wire:click.prevent='status({{$brand->id}})' class="btn btn-success" href="#" role="button">{{$brand->status}}</a>
                                     @else
-                                        <a name="" id="" wire:click.prevent='status({{$category->id}})' class="btn btn-danger" href="#" role="button">{{$category->status}}</a>
+                                        <a name="" id="" wire:click.prevent='status({{$brand->id}})' class="btn btn-danger" href="#" role="button">{{$brand->status}}</a>
                                     @endif
                                 </td>
-                                <td class="text-center"><button  title="Edit" wire:click.prevent = 'edit({{$category->id}})' data-toggle="modal" data-target="#modalEdit" class="pd-setting-ed"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></td>
-                                <td class=""> <button  title="Trash" onclick="return confirm('Are you sure you want to delete the category?')" wire:click.prevent='delete({{$category->id}})' class="pd-setting-ed"><i class="fa fa-trash-o" aria-hidden="true"></i></button></td>
+                                <td class="text-center"><button  title="Edit" wire:click.prevent = 'edit({{$brand->id}})' data-toggle="modal" data-target="#modalEdit" class="pd-setting-ed"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></td>
+                                <td class=""> <button  title="Trash" onclick="return confirm('Are you sure you want to delete the brand?')" wire:click.prevent='delete({{$brand->id}})' class="pd-setting-ed"><i class="fa fa-trash-o" aria-hidden="true"></i></button></td>
                             </tr>
                             @endforeach
                 </tbody>
             </table>
         </div>
-        {{$categories->links()}}
+        {{$brands->links()}}
     </div>
-    <!-- Modal Add -->
+    {{-- <!-- Modal Add -->
     <div wire:ignore.self class="modal fade" id="modalAdd" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -251,7 +244,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 <div dropzone="copy"></div>
 <script>
     document.addEventListener('DOMContentLoaded', function(){
@@ -261,3 +254,4 @@
         });
     });
 </script>
+

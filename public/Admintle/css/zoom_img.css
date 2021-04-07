@@ -2,7 +2,7 @@
     cursor: pointer;
     transition: -webkit-transform 0.1s ease
     }
-    img:hover {
-        -webkit-transform: scale(4);
-        -ms-transform: scale(4);
+    .products:focus {
+        -webkit-transform: scale(2);
+        -ms-transform: scale(2);
     }

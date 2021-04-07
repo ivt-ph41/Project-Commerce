@@ -16,6 +16,9 @@
                             <li><a title="Dashboard v.1" href="{{route('admin.category')}}"><span class="mini-sub-pro">Categories</span></a></li>
                         </ul>
                         <ul class="submenu-angle" aria-expanded="true">
+                            <li><a title="Product" href="{{route('admin.brand')}}"><span class="mini-sub-pro">Brands</span></a></li>
+                        </ul>
+                        <ul class="submenu-angle" aria-expanded="true">
                             <li><a title="Product" href="{{route('admin.product')}}"><span class="mini-sub-pro">Products</span></a></li>
                         </ul>
                     </li>

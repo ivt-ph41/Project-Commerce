@@ -71,7 +71,7 @@ class CheckoutComponent extends Component
             }
             else{
                 $discounts = Discount::with('discount_users')->where('code',$this->discount)->first();
-                if(!empty($discounts)){
+                if(!empty($discounts) && $discounts->end_day > now()){
                     if(!empty($discounts->discount_users->first()->pivot->status)){
                         if($discounts->discount_users->first()->pivot->status == 'enable'){
                             if($discounts->type=='1'){
@@ -118,7 +118,7 @@ class CheckoutComponent extends Component
                 };
                 $this->emit('thankyou');
                 $this->destroyAll();
-                //$this->ResetInput();
+                // $this->ResetInput();
                 if(Discount::where('code',$this->discount)->first()){
                     Discount::where('code',$this->discount)->first()->discount_users()->updateExistingPivot(Auth::user()->id,['status'=>'disable']);
                 }
