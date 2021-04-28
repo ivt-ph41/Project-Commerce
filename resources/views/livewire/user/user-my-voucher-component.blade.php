@@ -16,9 +16,9 @@
                         @if ($Myvoucher->end_day >= now() && $Myvoucher->pivot->status == 'enable')
                                 <div class="card-img-overlay pl-5  text-center">
                                     @if ($Myvoucher->type==1)
-                                    <h4 class="card-title text-warning">Giảm {{$Myvoucher->reduced_price}} VNĐ </h4>
+                                    <h4 class="card-title text-warning">Sale  {{$Myvoucher->reduced_price}} VNĐ </h4>
                                     @else
-                                    <h4 class="card-title text-warning">Giảm {{$Myvoucher->reduced_price}} % </h4>
+                                    <h4 class="card-title text-warning">Sale  {{$Myvoucher->reduced_price}} % </h4>
                                     @endif
                                     <p class="card-text text-info">{{$Myvoucher->start_day}}-{{$Myvoucher->end_day}}</p>
                                     <h3>Code: {{$Myvoucher->code}}</h3>
@@ -26,12 +26,12 @@
                         @else
                             <div class="card-img-overlay mr-auto mt-2 text-center">
                                 @if ($Myvoucher->type==1)
-                                <h4 class="card-title ">Giảm {{$Myvoucher->reduced_price}} VNĐ </h4>
+                                <h4 class="card-title ">Sale {{$Myvoucher->reduced_price}} VNĐ </h4>
                                 @else
-                                <h4 class="card-title">Giảm {{$Myvoucher->reduced_price}} % </h4>
+                                <h4 class="card-title">Sale {{$Myvoucher->reduced_price}} % </h4>
                                 @endif
                                 <p class="card-text">{{$Myvoucher->start_day}}-{{$Myvoucher->end_day}}</p>
-                                <h5 class="text-dark pl-5">Bạn đã sử dụng voucher này hoặc voucher đã hết hạn sử dụng</h5>
+                                <h5 class="text-dark pl-5">You have used an expired discount card or discount card</h5>
                             </div>
                         @endif
                     </div>

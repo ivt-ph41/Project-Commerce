@@ -100,4 +100,13 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Discount::class, 'user_discount', 'user_id', 'discount_id')->withPivot('status')->withTimestamps();
     }
+    /**
+     * The roles that belong to the Product
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function user_wishlists()
+    {
+        return $this->belongsToMany(Product::class, 'wishlist', 'user_id', 'product_id');
+    }
 }

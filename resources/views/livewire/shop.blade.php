@@ -6,7 +6,7 @@
 			<div class="wrap-breadcrumb">
 				<ul>
 					<li class="item-link"><a href="#" class="link">home</a></li>
-					<li class="item-link"><span>Digital & Electronics</span></li>
+					<li class="item-link"><span>shop</span></li>
 				</ul>
 			</div>
 			<div class="row bg-light" >
@@ -49,9 +49,11 @@
 					</div>
                     <!--  /Banner Category -->
 					<div class="wrap-shop-control">
-
-						<h1 class="shop-title">Digital & Electronics</h1>
-
+                        @if (isset($count_product))
+                        <h1 class="shop-title">Có {{$count_product}} sản phẩm được tìm thấy</h1>
+                        @else
+                        <h1 class="shop-title">PRODUCTS</h1>
+                        @endif
 						<div class="wrap-right">
 
 							<div class="sort-item orderby">
@@ -152,12 +154,11 @@
 							</ul>
 						</div>
 					</div><!-- Categories widget-->
-
+                    @if (isset($slug_cat))
 					<div class="widget mercado-widget filter-widget brand-widget">
 						<h2 class="widget-title">Brand</h2>
 						<div class="widget-content">
 							<ul class="list-style vertical-list list-limited" data-show="6">
-								@if (isset($slug_cat))
                                 @foreach ($brand_show as $brand)
                                 <li class="list-item"><a class="filter-link " href="{{route('brand.product',['slug_cat'=>$slug_cat,'slug_brand'=>$brand->slug])}}">{{$brand->name}}</a></li>
                                 @endforeach
@@ -166,18 +167,18 @@
 								<li class="list-item default-hiden"><a class="filter-link " href="#">Sound & Speaker</a></li>
 								<li class="list-item default-hiden"><a class="filter-link " href="#">Shop Smartphone & Tablets</a></li>
 								<li class="list-item"><a data-label='Show less<i class="fa fa-angle-up" aria-hidden="true"></i>' class="btn-control control-show-more" href="#">Show more<i class="fa fa-angle-down" aria-hidden="true"></i></a></li>
-                                @endif
+
 							</ul>
 						</div>
 					</div><!-- brand widget-->
-
+                    @endif
 					<div class="widget mercado-widget filter-widget price-filter">
 						<h2 class="widget-title">Price</h2>
 						<div class="widget-content">
 							<form class="form-inline">
                                 <div class="form-group">
-                                    <input type="text" name="" id="" class="form-control" style="width:80px" wire:model = 'price_start' placeholder="from" aria-describedby="helpId">-
-                                    <input type="text" name="" id="" class="form-control" style="width:80px" wire:model = 'price_end' placeholder="to" aria-describedby="helpId">
+                                    <input type="number" name="" id="" class="form-control" style="width:80px" wire:model = 'price_start' placeholder="from" aria-describedby="helpId" min="1">-
+                                    <input type="number" name="" id="" class="form-control" style="width:80px" wire:model = 'price_end' placeholder="to" aria-describedby="helpId">
                                 </div>
                             </form>
 						</div>
@@ -193,7 +194,7 @@
 								<li class="text-dark list-item"><input class="" wire:model='SelectColor' type="checkbox" name="" value="Black"> Black</li>
 								<li class="text-primary list-item"><input class="" wire:model='SelectColor' type="checkbox" name="" value="Blue"> Blue</li>
 								<li class="text-muted list-item"><input class="" wire:model='SelectColor' type="checkbox" name="" value="Grey"> Grey</li>
-								<li class="list-item"><input class="" wire:model='SelectColor' type="checkbox" name="" value="Pink"> Pink</li>
+								<li class="text-muted list-item"><input class="" wire:model='SelectColor' type="checkbox" name="" value="white"> White</li>
 							</ul>
 						</div>
 					</div><!-- Color -->
@@ -204,11 +205,14 @@
 						<div class="widget-content">
 							<ul class="list-style vertical-list has-count-index">
 								<li class="text-muted "><input class="" wire:model='SelectRam' type="checkbox" name="" value="1"> 1Gb</li>
-								<li class="text-muted list-item"><input class="" wire:model='SelectRam' type="checkbox" name="" value="<i class="ri-24-hours-fill"></i> 2Gb</li>
-								<li class="text-muted list-item"><input class="" wire:model='SelectRam' type="checkbox" name="" value="3"> 3Gb</li>
-								<li class="text-muted list-item"><input class="" wire:model='SelectRam' type="checkbox" name="" value="4"> 4Gb</li>
-								<li class="text-muted list-item"><input class="" wire:model='SelectRam' type="checkbox" name="" value="5"> 5Gb</li>
-								<li class="list-muted"><input class="" wire:model='SelectRam' type="checkbox" name="" value="6"> 6Gb</li>
+								<li class="text-muted "><input class="" wire:model='SelectRam' type="checkbox" name="" value="2"> 2Gb</li>
+								<li class="text-muted "><input class="" wire:model='SelectRam' type="checkbox" name="" value="3"> 3Gb</li>
+								<li class="text-muted "><input class="" wire:model='SelectRam' type="checkbox" name="" value="4"> 4Gb</li>
+								<li class="text-muted"><input class="" wire:model='SelectRam' type="checkbox" name="" value="5"> 5Gb</li>
+								<li class="text-muted"><input class="" wire:model='SelectRam' type="checkbox" name="" value="6"> 6Gb</li>
+                                <li class="text-muted"><input class="" wire:model='SelectRam' type="checkbox" name="" value="8"> 8Gb</li>
+                                <li class="text-muted"><input class="" wire:model='SelectRam' type="checkbox" name="" value="16"> 16Gb</li>
+                                <li class="text-muted"><input class="" wire:model='SelectRam' type="checkbox" name="" value="32"> 32Gb</li>
 							</ul>
 						</div>
 					</div><!-- Ram -->
@@ -245,21 +249,6 @@
 						</div>
 					</div><!-- OS -->
                     @endif
-
-					<div class="widget mercado-widget filter-widget">
-						<h2 class="widget-title">Size</h2>
-						<div class="widget-content">
-							<ul class="list-style inline-round ">
-								<li class="list-item"><a class="filter-link active" href="#">s</a></li>
-								<li class="list-item"><a class="filter-link " href="#">M</a></li>
-								<li class="list-item"><a class="filter-link " href="#">l</a></li>
-								<li class="list-item"><a class="filter-link " href="#">xl</a></li>
-							</ul>
-							<div class="widget-banner">
-								<figure><img src="{{asset('Commerce/assets/images/size-banner-widget.jpg')}}" width="270" height="331" alt=""></figure>
-							</div>
-						</div>
-					</div><!-- Size -->
 
 					<div class="widget mercado-widget widget-product">
 						<h2 class="widget-title">Popular Products</h2>

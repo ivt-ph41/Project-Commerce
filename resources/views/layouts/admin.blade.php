@@ -105,6 +105,9 @@
         window.livewire.on('Add_success',()=>{
             toastr.success('Create Successfully!');
         });
+        window.livewire.on('not_delete',()=>{
+            toastr.warning('Cant not delete');
+        });
     </script>
     <!-- jquery
 		============================================ -->

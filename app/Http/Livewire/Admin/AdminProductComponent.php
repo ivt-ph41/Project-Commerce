@@ -18,7 +18,6 @@ class AdminProductComponent extends Component
     public $ids;
     public $name;
     public $file;
-    public $slug;
     public $sku;
     public $short_description;
     public $description;
@@ -89,7 +88,6 @@ class AdminProductComponent extends Component
             'origin' =>'required',
             'weight' => 'required',
             'Dimension' => 'required',
-            'slug' => 'required',
             'category_id' => 'required',
             'manufacturer_id' => 'required'
         ]
@@ -98,7 +96,7 @@ class AdminProductComponent extends Component
     public function store(){
         $this->validate(
             [
-                'name' => 'required',
+                'name' => 'required|unique:products',
                 'file' =>'required',
                 'detail_image' =>'required',
                 'sku' => 'required',
@@ -111,12 +109,13 @@ class AdminProductComponent extends Component
                 'origin' =>'required',
                 'weight' => 'required',
                 'Dimension' => 'required',
-                'slug' => 'required',
                 'category_id' => 'required',
                 'manufacturer_id' => 'required'
             ]
         );
         $path = $this->file->storeAs('products',$this->file->getClientOriginalName(),'public');
+        // $data=$request->all();
+        // $data['regular_price']=$data['origin_price']*(100 - $data['sale_percent'])/100
         $products = Product::create([
             'name' => $this->name,
             'image' => $path,
@@ -132,7 +131,7 @@ class AdminProductComponent extends Component
             'weight' => $this->weight,
             'Dimension' => $this->Dimension,
             'ram' => $this->ram,
-            'slug' => $this->slug,
+            'slug' => $this->name,
             'updated_at' => Null,
             'category_id' => $this->category_id,
             'manufacturer_id' => $this->manufacturer_id,
@@ -235,7 +234,7 @@ class AdminProductComponent extends Component
         }
     }
     public function detail($id){
-        $product_details = Product::find($id);
+        $product_details = Product::withTrashed()->find($id);
         $this->id_dt = $product_details->id;
     }
     public function delete($id){
@@ -256,7 +255,7 @@ class AdminProductComponent extends Component
             $brands = [];
         }
         if(isset($this->id_dt)){
-            $product_details = Product::with('product_brands','product_categories')->find($this->id_dt);
+            $product_details = Product::with('product_brands','product_categories')->withTrashed()->find($this->id_dt);
         }else{
             $product_details=[];
         }

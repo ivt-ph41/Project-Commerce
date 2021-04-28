@@ -15,7 +15,7 @@
                             <ul class="breadcome-menu">
                                 <li><a href="#">Home</a> <span class="bread-slash">/</span>
                                 </li>
-                                <li><span class="bread-blod">Category</span>
+                                <li><span class="bread-blod">Brand</span>
                                 </li>
                             </ul>
                         </div>
@@ -41,10 +41,10 @@
                 </div>
             </div>
             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
-                <select name="sort" wire:model.defer='sort' class="form-control">
+                <select name="sort" wire:model='sort' class="form-control">
                     <option value="default" selected="">Order By</option>
                     <option value="name">Name</option>
-                    <option value="slug">Slug</option>
+                    <option value="address">Address</option>
                     <option value="created_at">Create Day</option>
                     <option value="updated_at">Update Day</option>
                     <option value="status">Status</option>
@@ -53,7 +53,7 @@
                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
                     <div class="breadcome-heading ml-5">
                         <form role="search" class="sr-input-func">
-                            <input type="text" wire:model.defer = 'search' placeholder="Search..." class="search-int form-control">
+                            <input type="text" wire:model = 'search' placeholder="Search..." class="search-int form-control">
                             <a href="#"><i class="fa fa-search"></i></a>
                         </form>
                     </div>
@@ -111,12 +111,12 @@
         </div>
         {{$brands->links()}}
     </div>
-    {{-- <!-- Modal Add -->
+    <!-- Modal Add -->
     <div wire:ignore.self class="modal fade" id="modalAdd" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                     <div class="modal-header bg-info">
-                            <h5 class="modal-title">Create Category</h5>
+                            <h5 class="modal-title">Create Brand</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -133,13 +133,6 @@
                                 @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label for="" class="text-muted">Images:</label>
-                                    <input type="file" name="file" wire:model.defer='file' id="file" class="form-control-file" placeholder="" aria-describedby="helpId">
-                                    @error('file')
-                                    <small id="helpId" class="text-danger">{{$message}}</small>
-                                    @enderror
-                                </div>
-                                <div class="form-group">
                                     <label for="" class="text-muted">Slug</label>
                                     <input type="text" name="slug" wire:model.defer='slug' id="" class="form-control" placeholder="" aria-describedby="helpId">
                                     @error('slug')
@@ -147,20 +140,16 @@
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label for="" class="text-muted">Category Sliders</label>
-                                    <input type="file" name="file_banner" wire:model.defer='file_banner' multiple id="" class="form-control-file" placeholder="" aria-describedby="helpId">
-                                    @error('file_banner')
+                                    <label for="" class="text-muted">Address</label>
+                                    <input type="text" name="address" wire:model.defer='address' id="" class="form-control" placeholder="" aria-describedby="helpId">
+                                    @error('address')
                                     <small id="helpId" class="text-danger">{{$message}}</small>
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label for="" class="text-muted">Brand</label>
-                                      <select class="form-control" wire:model.defer = 'brand' name="" id="" multiple>
-                                        @foreach ($brands as $brand)
-                                            <option value="{{$brand->id}}">{{$brand->name}}</option>
-                                        @endforeach
-                                      </select>
-                                    @error('brand')
+                                    <label for="" class="text-muted">Brand Sliders</label>
+                                    <input type="file" name="file_banner" wire:model.defer='file_banner' multiple id="" class="form-control-file" placeholder="" aria-describedby="helpId">
+                                    @error('file_banner')
                                     <small id="helpId" class="text-danger">{{$message}}</small>
                                     @enderror
                                 </div>
@@ -183,7 +172,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                     <div class="modal-header bg-violet text-light">
-                            <h5 class="modal-title text-dark" >Update Category</h5>
+                            <h5 class="modal-title text-dark" >Update Brand</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -193,45 +182,34 @@
                         <form  action="" method="post" wire:submit.prevent='update' enctype="multipart/form-data" id="form1" runat="server">
                             <input id="my-input" type="hidden" wire:model.defer = 'ids' name="" value="">
                             <div class="form-group">
-                              <label for="" class="text-muted">Name:</label>
-                              <input type="text" name="name" wire:model.defer='name' id="" class="form-control" placeholder="" aria-describedby="helpId">
-                              @error('name')
-                                <small id="helpId" class="text-danger">{{$message}}</small>
-                              @enderror
-                            </div>
-                            <div class="form-group">
-                                <label for="" class="text-muted">Images:</label>
-                                <input type="file" name="file" wire:model.defer = 'file' id="imgInp" class="form-control-file" placeholder="" aria-describedby="helpId" oninput="pic.src=window.URL.createObjectURL(this.files[0])">
-                                <img id="pic" />
-                                @error('file')
-                                <small id="helpId" class="text-danger">{{$message}}</small>
+                                <label for="" class="text-muted">Name:</label>
+                                <input type="text" name="name" wire:model.defer='name' id="" class="form-control" placeholder="" aria-describedby="helpId">
+                                @error('name')
+                                    <small id="helpId" class="text-danger">{{$message}}</small>
                                 @enderror
-                            </div>
-                            <div class="form-group">
-                                <label for="" class="text-muted">Slug</label>
-                                <input type="text" name="slug" wire:model.defer='slug' id="" class="form-control" placeholder="" aria-describedby="helpId">
-                                @error('slug')
-                                <small id="helpId" class="text-danger">{{$message}}</small>
-                                @enderror
-                            </div>
-                            <div class="form-group">
-                                <label for="" class="text-muted">Category Sliders</label>
-                                <input type="file" name="file_banner" wire:model.defer='file_banner' multiple id="" class="form-control-file" placeholder="" aria-describedby="helpId">
-                                @error('file_banner')
-                                <small id="helpId" class="text-danger">{{$message}}</small>
-                                @enderror
-                            </div>
-                            <div class="form-group">
-                                <label for="" class="text-muted">Brand</label>
-                                  <select class="form-control" wire:model.defer = 'brand' name="" id="" multiple>
-                                    @foreach ($brands as $brand)
-                                        <option value="{{$brand->id}}">{{$brand->name}}</option>
-                                    @endforeach
-                                  </select>
-                                @error('brand')
-                                <small id="helpId" class="text-danger">{{$message}}</small>
-                                @enderror
-                            </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="text-muted">Slug</label>
+                                    <input type="text" name="slug" wire:model.defer='slug' id="" class="form-control" placeholder="" aria-describedby="helpId">
+                                    @error('slug')
+                                    <small id="helpId" class="text-danger">{{$message}}</small>
+                                    @enderror
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="text-muted">Address</label>
+                                    <input type="text" name="address" wire:model.defer='address' id="" class="form-control" placeholder="" aria-describedby="helpId">
+                                    @error('address')
+                                    <small id="helpId" class="text-danger">{{$message}}</small>
+                                    @enderror
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="text-muted">Brand Sliders</label>
+                                    <input type="file" name="file_banner" wire:model.defer='file_banner' multiple id="" class="form-control-file" placeholder="" aria-describedby="helpId">
+                                    @error('file_banner')
+                                    <small id="helpId" class="text-danger">{{$message}}</small>
+                                    @enderror
+                                </div>
+                                <div class="form-group">
                             <div class="form-group">
                                 <input name="" id="" class="btn btn-primary btn-block" type="submit" value="Edit Product">
                             </div>
@@ -244,7 +222,7 @@
             </div>
         </div>
     </div>
-</div> --}}
+</div>
 <div dropzone="copy"></div>
 <script>
     document.addEventListener('DOMContentLoaded', function(){

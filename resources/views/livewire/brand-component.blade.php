@@ -64,15 +64,9 @@
 							</div>
 
 							<div class="sort-item product-per-page">
-								<select name="post-per-page" class="use-chosen" >
-									<option value="12" selected="selected">12 per page</option>
-									<option value="16">16 per page</option>
-									<option value="18">18 per page</option>
-									<option value="21">21 per page</option>
-									<option value="24">24 per page</option>
-									<option value="30">30 per page</option>
-									<option value="32">32 per page</option>
-								</select>
+								<div class="sort-item orderby">
+                                    <input class="" wire:model='search' type="text" name="" placeholder="Search...">
+                                </div>
 							</div>
 
 							<div class="change-display-mode">
@@ -85,9 +79,8 @@
 					</div><!--end wrap shop control-->
                     {{-- {{dd($products->first()->product_images->first()->images)}} --}}
 					<div class="row">
-						<ul class="product-list grid-products equal-container">
                             @foreach ($products as $product)
-                            <li class="col-lg-3 col-md-6 col-sm-6 col-xs-6  ">
+                            <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6  ">
 								<div class="product product-style-3 equal-elem card">
 									<div class="product-thumnail">
 										<a href="{{route('product.detail',['slug' =>$product->slug ])}}" title="{{$product->name}}">
@@ -128,10 +121,8 @@
 										<a href="#" wire:click.prevent="store({{$product->id}},'{{$product->name}}',{{$product->regular_price}})" class="btn add-to-cart">Add To Cart</a>
 									</div>
 								</div>
-							</li>
+							</div>
                             @endforeach
-
-						</ul>
 					</div>
 					<div class="wrap-pagination-info">
                         {{ $products->links() }}
@@ -205,7 +196,7 @@
 								<li class="text-dark list-item"><input class="" wire:model='SelectColor' type="checkbox" name="" value="Black"> Black</li>
 								<li class="text-primary list-item"><input class="" wire:model='SelectColor' type="checkbox" name="" value="Blue"> Blue</li>
 								<li class="text-muted list-item"><input class="" wire:model='SelectColor' type="checkbox" name="" value="Grey"> Grey</li>
-								<li class="list-item"><input class="" wire:model='SelectColor' type="checkbox" name="" value="Pink"> Pink</li>
+								<li class="text-muted"><input class="" wire:model='SelectColor' type="checkbox" name="" value="White"> White</li>
 							</ul>
 						</div>
 					</div><!-- Color -->
@@ -216,11 +207,14 @@
 						<div class="widget-content">
 							<ul class="list-style vertical-list has-count-index">
 								<li class="text-muted "><input class="" wire:model='SelectRam' type="checkbox" name="" value="1"> 1Gb</li>
-								<li class="text-muted list-item"><input class="" wire:model='SelectRam' type="checkbox" name="" value="2"> 2Gb</li>
-								<li class="text-muted list-item"><input class="" wire:model='SelectRam' type="checkbox" name="" value="3"> 3Gb</li>
-								<li class="text-muted list-item"><input class="" wire:model='SelectRam' type="checkbox" name="" value="4"> 4Gb</li>
-								<li class="text-muted list-item"><input class="" wire:model='SelectRam' type="checkbox" name="" value="5"> 5Gb</li>
-								<li class="list-muted"><input class="" wire:model='SelectRam' type="checkbox" name="" value="6"> 6Gb</li>
+								<li class="text-muted "><input class="" wire:model='SelectRam' type="checkbox" name="" value="2"> 2Gb</li>
+								<li class="text-muted "><input class="" wire:model='SelectRam' type="checkbox" name="" value="3"> 3Gb</li>
+								<li class="text-muted "><input class="" wire:model='SelectRam' type="checkbox" name="" value="4"> 4Gb</li>
+								<li class="text-muted"><input class="" wire:model='SelectRam' type="checkbox" name="" value="5"> 5Gb</li>
+								<li class="text-muted"><input class="" wire:model='SelectRam' type="checkbox" name="" value="6"> 6Gb</li>
+                                <li class="text-muted"><input class="" wire:model='SelectRam' type="checkbox" name="" value="8"> 8Gb</li>
+                                <li class="text-muted"><input class="" wire:model='SelectRam' type="checkbox" name="" value="16"> 16Gb</li>
+                                <li class="text-muted"><input class="" wire:model='SelectRam' type="checkbox" name="" value="32"> 32Gb</li>
 							</ul>
 						</div>
 					</div><!-- Color -->

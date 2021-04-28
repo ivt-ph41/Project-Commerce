@@ -26,14 +26,13 @@
 						</div>
 						<div class="detail-info">
 							<div class="product-rating">
-                                <i class="fa fa-star" aria-hidden="true"></i>
-                                <i class="fa fa-star" aria-hidden="true"></i>
-                                <i class="fa fa-star" aria-hidden="true"></i>
-                                <i class="fa fa-star" aria-hidden="true"></i>
-                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <div class="star-rating">
+                                    <span class="width-{{number_format($review_avg)}}-percent">Rated <strong class="rating">5</strong> out of 5</span>
+                                </div>
                                 <a href="#" class="count-review">({{$review_count}} review)</a>
                             </div>
                             <h2 class="product-name">{{ $products->name }}</h2>
+                            @if ($products->quantity > 0)
                             <p class="text-dark">View: <b class="text-info">{{$products->view}}</b></p>
                             <div class="short-desc">
                                 <ul>
@@ -62,14 +61,23 @@
 							</div>
                             <div class="quantity">
                             	<span>Color:</span>
-                                    <label class="btn btn-dark active">
-                                        <input class="form-check-input" wire:model = 'color' type="radio" name="inlineRadioOptions" id="inlineRadio1" value="Black" checked='checked'> Black
+                                    <label class="btn btn-dark btn-sm active ">
+                                        <input class="form-check-input" wire:model.defer = 'color' type="radio" name="inlineRadioOptions" id="inlineRadio1" value="Black" checked='checked'>Black
                                     </label>
-                                    <label class="btn btn-danger">
-                                        <input class="form-check-input" wire:model = 'color' type="radio" name="inlineRadioOptions" id="inlineRadio2" value="Red"> Red
+                                    <label class="btn btn-danger btn-sm">
+                                        <input class="form-check-input" wire:model.defer = 'color' type="radio" name="inlineRadioOptions" id="inlineRadio2" value="Red">Red
                                     </label>
-                                    <label class="btn btn-info">
-                                        <input class="form-check-input" wire:model = 'color' type="radio" name="inlineRadioOptions" id="inlineRadio3" value="Blue"> Blue
+                                    <label class="btn btn-info btn-sm">
+                                        <input class="form-check-input" wire:model.defer = 'color' type="radio" name="inlineRadioOptions" id="inlineRadio3" value="Blue">Blue
+                                    </label>
+                                    <label class="btn btn-light btn-sm">
+                                        <input class="form-check-input" wire:model.defer = 'color' type="radio" name="inlineRadioOptions" id="inlineRadio3" value="White">White
+                                    </label>
+                                    <label class="btn btn-warning btn-sm">
+                                        <input class="form-check-input" wire:model.defer = 'color' type="radio" name="inlineRadioOptions" id="inlineRadio3" value="Yellow">Yellow
+                                    </label>
+                                    <label class="btn btn-secondary btn-sm">
+                                        <input class="form-check-input" wire:model.defer = 'color' type="radio" name="inlineRadioOptions" id="inlineRadio3" value="Gray">Gray
                                     </label>
 							</div>
 							<div class="wrap-butons">
@@ -77,14 +85,27 @@
                                 <a href="#" wire:click.prevent="storeBuy({{$products->id}},'{{$products->name}}',{{$quantity}},{{$products->regular_price}})" class="btn buy-now">Buy Now</a>
                                 <div class="wrap-btn">
                                     <a href="#" class="btn btn-compare">Add Compare</a>
-                                    <a href="#" class="btn btn-wishlist">Add Wishlist</a>
+                                    @if ($wishlist_check!=Null)
+                                        @if ($wishlist_check->id == $products->id)
+                                            <button type="button" class="btn btn-wishlist">Liked</button>
+                                        @else
+                                        <a href="#" wire:click.prevent = 'Wishlist({{$products->id}})' class="btn btn-wishlist">Add Wishlist</a>
+                                        @endif
+                                    @else
+                                    <a href="#" wire:click.prevent = 'Wishlist({{$products->id}})' class="btn btn-wishlist">Add Wishlist</a>
+                                    @endif
                                 </div>
 							</div>
+                            @else
+                                <h2>OUT OF STOCK</h2>
+                            @endif
 						</div>
 						<div class="advance-info">
 							<div class="tab-contents">
-                                <div class="" id="add_infomation">
-                                    <h4 class="text-muted pt-3 pl-3">IFNOMATION</h4>
+                                <div class="text-dark pt-3 pl-3" id="add_infomation">
+                                    <div class="order-summary">
+                                        <h4 class="title-box">Infomation</h4>
+                                    </div>
 									<table class="shop_attributes ml-5">
 										<tbody>
                                             <tr>
@@ -119,12 +140,16 @@
 										</tbody>
 									</table>
 								</div>
-                                <div class="" id="description">
-                                <h4 class="text-muted pt-3 pl-3">DESCRIPTION</h4>
+                                <div class="text-dark pt-3 pl-3" id="description">
+                                    <div class="order-summary">
+                                        <h4 class="title-box">Description</h4>
+                                    </div>
                                     {{$products->description}}
 								</div>
 								<div class="text-dark pt-3 pl-3" id="reviews" wire:poll.10000ms = 'render'>
-                                    <h4 class="text-muted">REVIEWS</h4>
+                                    <div class="order-summary">
+                                        <h4 class="title-box">Reviews</h4>
+                                    </div>
                                     @if (Auth::check())
                                     <div id="review_form_wrapper" class="ml-5">
                                         <div id="review_form">
@@ -294,7 +319,9 @@
 					</div>
 
 				</div><!--end sitebar-->
-
+                <div class="wrap-show-advance-info-box">
+                    <h3 class="title-box">Related products</h3>
+                </div>
 				<div class="single-advance-box col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <!--Carousel Wrapper-->
                     <div id="multi-item-example" class="carousel slide carousel-multi-item" data-ride="carousel">
@@ -317,7 +344,6 @@
                         <!--Slides-->
                         <!--First slide-->
                         <div class="carousel-item active">
-
                             <div class="row">
                             @foreach ($related_product as $item)
                                 @if ($loop->iteration<=6)

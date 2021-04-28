@@ -17,5 +17,4 @@ return [
     'Latest_Products' => 'Latest Products',
     'My_Acount' => 'My Acount',
     'Top_Selling' => 'Top Selling'
-    'Top rated_items' => 'Top Selling'
 ];

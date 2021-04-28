@@ -2,13 +2,17 @@
 
 namespace App\Http\Livewire\Admin;
 
+use App\Imports\CategoryImport;
+use App\Imports\UserImport;
 use Livewire\Component;
 use App\Models\Category;
 use App\Models\CategorySlider;
-use GuzzleHttp\Psr7\Request;
+use Illuminate\Http\Request;
 use Livewire\Livewire;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
+use Maatwebsite\Excel\Facades\Excel;
+
 class AdminCategoryComponent extends Component
 {
     use WithPagination;
@@ -101,10 +105,11 @@ class AdminCategoryComponent extends Component
         if(isset($this->ids)){
             $this->validate([
                 'name' => 'required',
-                'file' => 'required',
+                'file' => 'sometimes|file',
                 'slug' => 'required',
-                'file_banner' => 'required',
-                'brand' => 'required',
+                'file_banner' => 'sometimes|array',
+                'file_banner.*' => 'sometimes|required|file',
+                'brand' => 'sometimes',
             ]);
             $path = $this->file->storeAs('categories',$this->file->getClientOriginalName(),'public');
             $categories = Category::withTrashed()->find($this->ids);
@@ -131,14 +136,22 @@ class AdminCategoryComponent extends Component
     }
     public function delete($id){
         $categories = Category::withTrashed()->find($id);
+        if(!count($categories->cate_products)){
         $categories->forceDelete();
         $categories->cate_manus()->detach();
+        }else{
+            $this->emit('not_delete');
+        }
     }
     public function deleteAll(){
         $categories = Category::withTrashed()->whereIn('id',$this->SelectDelete);
         $categories->forceDelete();
         $categories->cate_manus()->detach();
         $this->SelectDelete = [];
+    }
+    public function EXCEL(Request $request){
+        Excel::import(new CategoryImport,$request->import_excel);
+        return redirect()->back();
     }
     public function render()
     {

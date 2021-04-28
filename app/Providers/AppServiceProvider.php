@@ -3,10 +3,12 @@
 namespace App\Providers;
 
 use App\Models\Category;
+use App\Models\ListWish;
 use App\Models\Manufacturer;
 use App\Models\Product;
 use App\Models\Slider;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -44,5 +46,10 @@ class AppServiceProvider extends ServiceProvider
         view()->composer(['livewire.home','livewire.user-dashboard-component','livewire.shop','livewire.detail-product-component','livewire.brand-component','livewire.admin.category-component'], function ($view) {
             $view->with('brands', Manufacturer::all());
         });
+        if(Auth::check()){
+            view()->composer(['partial.header','livewire.*'], function ($view) {
+                $view->with('countWishlist', ListWish::where('user_id',Auth::user()->id)->count());
+            });
+        }
     }
 }

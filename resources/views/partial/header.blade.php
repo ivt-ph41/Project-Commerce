@@ -13,7 +13,7 @@
                     <div class="topbar-menu right-menu">
                         <ul>
                             <li class="menu-item menu-item-has-children parent" >
-                                <a href="" class="link-term mercado-item-title">{{ trans('messages.US') }}</a>
+                                <a href="{{route('about-us')}}" class="link-term mercado-item-title">{{ trans('messages.US') }}</a>
                             </li>
                             <li class="menu-item menu-item-has-children parent" >
                                 <a href="{{ route('shop') }}" class="link-term mercado-item-title">{{ trans('messages.Shop') }}</a>
@@ -31,11 +31,25 @@
                                 <a href="{{ route('contact') }}" class="link-term mercado-item-title">{{ trans('messages.Contact') }}</a>
                             </li>
                             <li class="menu-item lang-menu menu-item-has-children parent">
-                                <a title="English" href="{!! route('user.change-language', ['en']) !!}"><span class="img label-before"><img src="{{asset('Commerce/assets/images/lang-en.png')}}" alt="lang-en"></span>English<i class="fa fa-angle-down" aria-hidden="true"></i></a>
+                                @if (Session::get('language') == 'en')
+                                <a title="English" href="{!! route('user.change-language', ['en']) !!}"><span class="img label-before"><img src="{{asset('Commerce/assets/images/lang/lang-en.png')}}" alt="lang-en"></span>English<i class="fa fa-angle-down" aria-hidden="true"></i></a>
                                 <ul class="submenu lang" >
-                                    <li class="menu-item text-dark" ><a title="Tiếng Việt" href="{!! route('user.change-language', ['vi']) !!}"><span class="img label-before"><img src="{{asset('Commerce/assets/images/lang-hun.png')}}" alt="lang-hun"></span>Tiếng Việt</a></li>
+                                    <li class="menu-item text-dark" ><a class="text-dark" title="Tiếng Việt" href="{!! route('user.change-language', ['vi']) !!}"><span class="img label-before"><img src="{{asset('Commerce/assets/images/lang/lang-vi.png')}}" alt="lang-hun"></span>Tiếng Việt</a></li>
 
                                 </ul>
+                                @elseif(Session::get('language') == 'vi')
+                                <a title="Tiếng Việt" href="{!! route('user.change-language', ['vi']) !!}"><span class="img label-before"><img src="{{asset('Commerce/assets/images/lang/lang-vi.png')}}" alt="lang-en"></span>Tiếng Việt<i class="fa fa-angle-down" aria-hidden="true"></i></a>
+                                <ul class="submenu lang" >
+                                    <li class="menu-item text-dark" ><a class="text-dark" title="English" href="{!! route('user.change-language', ['en']) !!}"><span class="img label-before"><img src="{{asset('Commerce/assets/images/lang/lang-en.png')}}" alt="lang-hun"></span>English</a></li>
+
+                                </ul>
+                                @else
+                                <a title="Tiếng Việt" href="{!! route('user.change-language', ['vi']) !!}"><span class="img label-before"><img src="{{asset('Commerce/assets/images/lang/lang-vi.png')}}" alt="lang-en"></span>Tiếng Việt<i class="fa fa-angle-down" aria-hidden="true"></i></a>
+                                <ul class="submenu lang" >
+                                    <li class="menu-item text-dark" ><a class="text-dark" title="English" href="{!! route('user.change-language', ['en']) !!}"><span class="img label-before"><img src="{{asset('Commerce/assets/images/lang/lang-en.png')}}" alt="lang-hun"></span>English</a></li>
+
+                                </ul>
+                                @endif
                             </li>
                             @if (Route::has('login'))
                                 @auth
@@ -76,6 +90,9 @@
                                                 <li class="menu-item" >
                                                     <a name="" id="" class="btn btn-success btn-sm btn-block" href="{{route('user.order')}}" role="button">My order</a>
                                                 </li>
+                                                <li class="menu-item" >
+                                                    <a name="" id="" class="btn btn-info btn-sm btn-block" href="{{route('user.my-voucher')}}" role="button">My Voucher</a>
+                                                </li>
                                             </ul>
                                         </li>
                                     @endif
@@ -98,9 +115,9 @@
 
                     <div class="wrap-search center-section">
                         <div class="wrap-search-form">
-                            <form action="#" id="form-search-top" name="form-search-top">
-                                <input type="text" name="search" value="" placeholder="Search here...">
-                                <button form="form-search-top" type="button"><i class="fa fa-search" aria-hidden="true"></i></button>
+                            <form action="{{route('product.search')}}" id="form-search-top" name="form-search-top">
+                                <input type="text" name="search" class="typeahead" value="" placeholder="Search here...">
+                                <button form="form-search-top" type="submit"><i class="fa fa-search " aria-hidden="true"></i></button>
                                 <div class="wrap-list-cate">
                                     <input type="hidden" name="product-cate" value="0" id="product-cate">
                                     <a href="#" class="link-control">{{ trans('messages.All_category') }}</a>
@@ -117,10 +134,10 @@
 
                     <div class="wrap-icon right-section">
                         <div class="wrap-icon-section wishlist">
-                            <a href="#" class="link-direction">
+                            <a href="{{route('user.my-wishlist')}}" class="link-direction">
                                 <i class="fa fa-heart" aria-hidden="true"></i>
                                 <div class="left-info">
-                                    <span class="index">0 item</span>
+                                    <span class="index">{{isset($countWishlist) ? $countWishlist : 0}} item</span>
                                     <span class="title">{{ trans('messages.WishList') }}</span>
                                 </div>
                             </a>
@@ -154,9 +171,8 @@
                             <ul class="nav menu-nav clone-main-menu " id="mercado_haead_menu" data-menuname="Sale Info" >
                                 <li class="menu-item"><a href="#" class="link-term">{{ trans('messages.Weekly_Featured') }}</a><span class="nav-label hot-label">hot</span></li>
                                 <li class="menu-item"><a href="{{route('user.voucher')}}" class="link-term">{{ trans('messages.Voucher') }}</a><span class="nav-label hot-label">hot</span></li>
-                                <li class="menu-item"><a href="#" class="link-term">{{ trans('messages.Top_new_items') }}</a><span class="nav-label hot-label">hot</span></li>
-                                <li class="menu-item"><a href="#" class="link-term">{{ trans('messages.Top_Selling') }}</a><span class="nav-label hot-label">hot</span></li>
-                                <li class="menu-item"><a href="#" class="link-term">Top rated items</a><span class="nav-label hot-label">hot</span></li>
+                                <li class="menu-item"><a href="{{route('shop.topnew')}}" class="link-term">{{ trans('messages.Top_new_items') }}</a><span class="nav-label hot-label">hot</span></li>
+                                <li class="menu-item"><a href="{{route('shop.topsale')}}" class="link-term">{{ trans('messages.Top_Selling') }}</a><span class="nav-label hot-label">hot</span></li>
                             </ul>
                     </div>
                 </div>
@@ -164,3 +180,16 @@
         </div>
     </div>
 </header>
+ <!-- bootstrap-3-typeahead -->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js" integrity="sha512-HWlJyU4ut5HkEj0QsK/IxBCY55n5ZpskyjVlAoV9Z7XQwwkqXoYdCIC93/htL3Gu5H3R4an/S0h2NXfbZk3g7w==" crossorigin="anonymous"></script>
+  <script>
+        var path = "{{route('autoSearch')}}";
+
+        $('input.typeahead').typeahead({
+            source: function(terms,process){
+                return $.get(path,{terms:terms},function(data){
+                    return process(data);
+                })
+            }
+        })
+    </script>

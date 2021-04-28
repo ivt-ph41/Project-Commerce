@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use App\Models\Product;
 use App\Models\Review;
 use App\Models\ReplyReview;
+use App\Models\User;
 use Egulias\EmailValidator\Warning\Comment;
 use Livewire\Component;
 use Gloudemans\Shoppingcart\Facades\Cart;
@@ -28,7 +29,12 @@ class DetailProductComponent extends Component
         $this->color = 'Black';
     }
     public function up_quantity(){
-        $this->quantity++;
+        $products = Product::where('slug',$this->slug)->first();
+        if($products->quantity > $this->quantity){
+            $this->quantity++;
+        }else{
+            $this->emit('check_quantity');
+        }
     }
     public function down_quantity(){
         $this->quantity--;
@@ -80,19 +86,34 @@ class DetailProductComponent extends Component
         ]);
         $this->ResetInput();
     }
+    public function Wishlist($product_id){
+        if(Auth::check()){
+            $wishlists = User::find(Auth::user()->id)->user_wishlists()->attach($product_id);
+            $this->emit('wishlist_success');
+        }else{
+            return redirect()->route('login');
+        }
+    }
     public function render()
     {
         $products = Product::with('product_images','product_brands')->where('slug',$this->slug)->first();
         $reviews = Review::with('review_users','review_product','reply_reviews')->where('product_id',$products->id)->orderBy('created_at','DESC')->paginate(5);
         $review_count = Review::with('review_users','review_product','reply_reviews')->where('product_id',$products->id)->count();
+        $review_avg = Review::where('product_id',$products->id)->avg('rating');
         $related_product = Product::where('category_id',$products->category_id)->whereBetween('regular_price',[$products->regular_price-500000,$products->regular_price+500000])->paginate(12);
+        //Count Withlist
+        if(Auth::check()){
+            $wishlist_check = User::find(Auth::user()->id)->user_wishlists->where('slug',$this->slug)->first();
+        }else{
+            $wishlist_check = [];
+        }
         //Đếm view
         if (!Session::get($products->slug)) { //nếu chưa có session
             $product_view = Product::findOrFail($products->id);
             Session::put($products->slug, 'lala'); //set giá trị cho session
             $product_view->increment('view');
         }
-        return view('livewire.detail-product-component',compact('products','related_product','reviews','review_count'))->layout('layouts.base');
+        return view('livewire.detail-product-component',compact('products','related_product','reviews','review_count','review_avg','wishlist_check'))->layout('layouts.base');
     }
     public function storeCart($product_id,$product_name,$quantity,$product_price){
        if(Auth::check()){

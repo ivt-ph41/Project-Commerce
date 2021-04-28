@@ -40,33 +40,53 @@ class CategoryComponent extends Component
         $category = Category::where('slug',$this->slug_cat)->first();
         if($this->sort!=Null){
             if($this->sort=="default"){
-                $products = Products::with('product_images')->where('category_id',$category->id)->where('name','like','%'.$this->search.'%')->paginate(12);
+                $products = Products::with('product_images')->inRandomOrder()->where('category_id',$category->id)
+                ->where(function($query){
+                    $query->where('quantity','>',0);
+                })->where(function($query){
+                    $query ->where('name','like','%'.$this->search.'%')->Orwhere('regular_price','like','%'.$this->search.'%');
+                })->paginate(20);
             }
             else if($this->sort=="popularity"){
-                $products = Products::with('product_images')->where('category_id',$category->id)->orderBy('view','DESC')->paginate(12);
+                $products = Products::with('product_images')->where('category_id',$category->id)
+                ->where(function($query){
+                    $query->where('quantity','>',0);
+                })->where(function($query){
+                    $query ->where('name','like','%'.$this->search.'%')->Orwhere('regular_price','like','%'.$this->search.'%');
+                })->orderBy('view','DESC')->paginate(20);
             }else if($this->sort=="price"){
-                $products = Products::with('product_images')->where('category_id',$category->id)->orderBy('regular_price')->paginate(12);
+                $products = Products::with('product_images')->where('category_id',$category->id)
+                ->where(function($query){
+                    $query->where('quantity','>',0);
+                })->where(function($query){
+                    $query ->where('name','like','%'.$this->search.'%')->Orwhere('regular_price','like','%'.$this->search.'%');
+                })->orderBy('regular_price')->paginate(20);
             }
             else if($this->sort=="price-desc"){
-                $products = Products::with('product_images')->where('category_id',$category->id)->orderBy('regular_price','DESC')->paginate(12);
+                $products = Products::with('product_images')->where('category_id',$category->id)
+                ->where(function($query){
+                    $query->where('quantity','>',0);
+                })->where(function($query){
+                    $query ->where('name','like','%'.$this->search.'%')->Orwhere('regular_price','like','%'.$this->search.'%');
+                })->orderBy('regular_price','DESC')->paginate(20);
             }
         }
         $brand_show = $category->cate_manus;
         $category_sliders = Category::where('slug',$this->slug_cat)->first()->category_sliders;
         if($this->SelectColor != Null){
-            $products = Products::with('product_images')->where('category_id',$category->id)->whereIn('color',$this->SelectColor)->paginate(20);
+            $products = Products::with('product_images')->where('quantity','>',0)->where('category_id',$category->id)->whereIn('color',$this->SelectColor)->paginate(20);
         }
         if($this->SelectRam != Null){
-            $products = Products::with('product_images')->where('category_id',$category->id)->whereIn('ram',$this->SelectRam)->paginate(20);
+            $products = Products::with('product_images')->where('quantity','>',0)->where('category_id',$category->id)->whereIn('ram',$this->SelectRam)->paginate(20);
         }
         if($this->SelectOS != Null){
-            $products = Products::with('product_images')->where('category_id',$category->id)->whereIn('operating_system',$this->SelectOS)->paginate(20);
+            $products = Products::with('product_images')->where('quantity','>',0)->where('category_id',$category->id)->whereIn('operating_system',$this->SelectOS)->paginate(20);
         }
         if($this->Battery != Null){
-            $products = Products::with('product_images')->where('category_id',$category->id)->whereIn('battery_capacity',$this->Battery)->paginate(20);
+            $products = Products::with('product_images')->where('quantity','>',0)->where('category_id',$category->id)->whereIn('battery_capacity',$this->Battery)->paginate(20);
         }
         if($this->price_start >0 && $this->price_end >0){
-            $products = Products::with('product_images')->where('category_id',$category->id)->whereBetween('regular_price', [$this->price_start, $this->price_end])
+            $products = Products::with('product_images')->where('quantity','>',0)->where('category_id',$category->id)->whereBetween('regular_price', [$this->price_start, $this->price_end])
             ->paginate(20);
         }
         return view('livewire.shop',compact('products','brand_show','category_sliders'))->layout('layouts.base');;

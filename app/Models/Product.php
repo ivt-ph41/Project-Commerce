@@ -34,4 +34,13 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class, 'category_id', 'id');
     }
+    /**
+     * Get all of the comments for the Product
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function products_orders()
+    {
+        return $this->hasMany(OrderItem::class, 'product_id', 'id');
+    }
 }

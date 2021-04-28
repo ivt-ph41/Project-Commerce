@@ -54,15 +54,13 @@
                                     @endforeach
                                 </a>
 							</div>
-							<div class="price-field produtc-price"><p class="price">{{$item->model->regular_price}}</p></div>
+							<div class="price-field produtc-price"><p class="price">{{number_format($item->model->regular_price)}} VNĐ</p></div>
 							<div class="quantity">
 								<div class="quantity-input">
-									<input type="text" name="product-quatity" value="{{$item->qty}}" data-max="12" pattern="[0-9]*" >
-									<a class="btn btn-increase" wire:click.prevent = "upQuantity('{{$item->rowId}}')" href="#"></a>
-									<a class="btn btn-reduce" wire:click.prevent = "downQuantity('{{$item->rowId}}')" href="#"></a>
+                                    <h6 class="text-muted">Quantity: {{$item->qty}}</h6>
 								</div>
 							</div>
-							<div class="price-field sub-total"><p class="price">{{$item->subtotal}}</p></div>
+							<div class="price-field sub-total"><p class="price">{{number_format($item->subtotal)}} VNĐ</p></div>
 							<div class="delete">
 								<a href="#" class="btn btn-delete" wire:click.prevent="remove('{{ $item->rowId }}')" title="">
 									<span>Delete from your cart</span>
@@ -70,20 +68,22 @@
 								</a>
 							</div>
 						</li>
-                        {{Cart::setTax($item->rowId,10)}}
+                        <!-- Set Shipping -->
+                        {{Cart::setTax($item->rowId,$shipping)}}
+                        <!-- -->
                         @endforeach
 					</ul>
                     @else
-                        <h5 class="text-muted">you not select any product</h5>
+                        <img src="{{asset('Commerce/assets/images/cart/empty_products.png')}}" width="200" height="200"  alt="Products Empty" data-toggle="tooltip" data-placement="top" title="Product Empty">
                     @endif
 				</div>
 
 				<div class="summary">
 					<div class="order-summary">
 						<h4 class="title-box">Order Summary</h4>
-						<p class="summary-info"><span class="title">Subtotal</span><b class="index">{{Cart::subtotal(0)}}</b></p>
-						<p class="summary-info"><span class="title">Shipping</span><b class="index">{{Cart::Tax(0)}}</b></p>
-						<p class="summary-info total-info "><span class="title">Total</span><b class="index">{{Cart::total(0)}}</b></p>
+						<p class="summary-info"><span class="title">Subtotal</span><b class="index">{{Cart::subtotal(0)}} VNĐ</b></p>
+						<p class="summary-info"><span class="title">Shipping</span><b class="index">{{Cart::Tax(0)}} VNĐ</b></p>
+						<p class="summary-info total-info "><span class="title">Total</span><b class="index">{{Cart::total(0)}} VNĐ</b></p>
 					</div>
 				</div>
 				<div class="summary summary-checkout">
@@ -116,10 +116,7 @@
 						</div>
 						<p class="summary-info grand-total"><span>Grand Total</span>
                             <span class="grand-total-price">
-                            @if (isset($discounts) && $discounts->end_day > now())
-                            {{-- {{dd($discounts->discount_users->first())}} --}}
-                                @if ($discounts->discount_users->first())
-                                    @if ($discounts->discount_users->first()->pivot->status == 'enable')
+                                    @if(isset($discounts))
                                         @if ($discounts->type==1)
                                         {{number_format((Cart::total(0,0,''))-$discounts->reduced_price)}} VNĐ
                                         @else
@@ -128,12 +125,6 @@
                                     @else
                                     {{Cart::total(0)}} VNĐ
                                     @endif
-                                @else
-                                     {{Cart::total(0)}} VNĐ
-                                @endif
-                            @else
-                                {{Cart::total(0)}} VNĐ
-                            @endif
                             </span>
                         </p>
 						<a wire:click.prevent = 'checkout' class="btn btn-medium">Place order now</a>
@@ -147,34 +138,21 @@
                                 <label for="coupon-code">Enter Your Coupon code:</label>
                                 <input id="coupon-code" wire:model = 'discount' type="text" name="coupon-code" value="" placeholder="">
                             </p>
-                            @if (isset($discounts) && $discounts->end_day > now())
-                                @if ($discounts->discount_users->first())
-                                    @if ($discounts->discount_users->first()->pivot->status == 'enable')
-                                        @if ($discounts->type==1)
-                                        <div class="alert alert-primary" role="alert">
+                            @if(isset($discounts))
+                                @if ($discounts->type==1)
+                                    <div class="alert alert-primary" role="alert">
                                             <strong>You get {{$discounts->reduced_price}}VNĐ off</strong>
-                                        </div>
-                                        @else
-                                        <div class="alert alert-primary" role="alert">
-                                            <strong>You get {{$discounts->reduced_price}}% off</strong>
-                                        </div>
-                                        @endif
-                                    @else
+                                    </div>
+                                 @else
+                                    <div class="alert alert-primary" role="alert">
+                                        <strong>You get {{$discounts->reduced_price}}% off</strong>
+                                    </div>
+                                @endif
+                                @else
                                     <div class="alert alert-danger" role="alert">
                                         <strong>Coupon code is incorrect or has expired</strong>
                                     </div>
-                                    @endif
-                                @else
-                                <div class="alert alert-danger" role="alert">
-                                    <strong>Coupon code is incorrect or has expired</strong>
-                                </div>
-                                @endif
-                            @else
-                            <div class="alert alert-danger" role="alert">
-                                <strong>Coupon code is incorrect or has expired</strong>
-                            </div>
                             @endif
-                            <buton type="submit" wire:click.prevent = 'show_discount' class="btn btn-small">Apply</buton>
 					</div>
 				</div>
 
@@ -211,8 +189,8 @@
                                                 <img class="card-img-top" src="{{asset('storage/'.$item->image)}}"
                                                     alt="Card image cap">
                                                 <div class="card-body">
-                                                    <p class="card-title text-warning">{{$item->name}}</p>
-                                                    <p class="card-text text-dark">{{$item->regular_price}}</p>
+                                                    <h6 class="card-title text-warning">{{$item->name}}</h6>
+                                                    <h6 class="card-text text-dark"><u>đ </u>{{number_format($item->regular_price)}}</h6>
                                                 </div>
                                             </div>
                                         </a>
@@ -236,8 +214,8 @@
                                             <img class="card-img-top" src="{{asset('storage/'.$item->image)}}"
                                                 alt="Card image cap">
                                             <div class="card-body">
-                                                <p class="card-title text-warning">{{$item->name}}</p>
-                                                <p class="card-text text-dark">{{$item->regular_price}}</p>
+                                                <h6 class="card-title text-warning">{{$item->name}}</h6>
+                                                <h6 class="card-text text-dark"><u>đ </u>{{number_format($item->regular_price)}}</h6>
                                             </div>
                                             </div>
                                         </a>

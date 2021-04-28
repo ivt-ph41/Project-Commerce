@@ -9,7 +9,7 @@ class Discount extends Model
 {
     use HasFactory;
     protected $table = 'discounts';
-    protected $fillable = ['id','code','type','description','end_day','start_day','created_at','updated_at'];
+    protected $fillable = ['id','code','type','quantity','reduced_price','end_day','start_day','created_at','updated_at'];
 
     /**
      * The roles that belong to the Discount

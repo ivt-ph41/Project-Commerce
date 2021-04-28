@@ -70,10 +70,16 @@ class CheckoutComponent extends Component
                 $this->emit('info');
             }
             else{
-                $discounts = Discount::with('discount_users')->where('code',$this->discount)->first();
-                if(!empty($discounts) && $discounts->end_day > now()){
-                    if(!empty($discounts->discount_users->first()->pivot->status)){
-                        if($discounts->discount_users->first()->pivot->status == 'enable'){
+                $discounts = Discount::with('discount_users')
+                ->where('code',$this->discount)
+                ->where('end_day','>',now())
+                ->whereHas('discount_users' , function($query) {
+                    return $query->where('status','enable')->where('user_id',Auth::user()->id);
+                })->first();
+                // if(!empty($discounts) && $discounts->end_day > now()){
+                //     if(!empty($discounts->discount_users->first()->pivot->status)){
+                //         if($discounts->discount_users->first()->pivot->status == 'enable')
+                        if ($discounts){
                             if($discounts->type=='1'){
                                 $orders = Order::create([
                                     'user_id' => Auth::user()->id,
@@ -94,39 +100,48 @@ class CheckoutComponent extends Component
                                 'total' => Cart::total(0,0,'')
                             ]);
                         }
-                    }else{
-                        $orders = Order::create([
-                            'user_id' => Auth::user()->id,
-                            'pay_method' => $this->payment_method,
-                            'total' => Cart::total(0,0,'')
-                        ]);
-                    }
-                }else{
-                    $orders = Order::create([
-                        'user_id' => Auth::user()->id,
-                        'pay_method' => $this->payment_method,
-                        'total' => Cart::total(0,0,'')
-                    ]);
-                }
-                foreach (Cart::content() as $item) {
-                    OrderItem::create([
-                        'order_id' => $orders->id,
-                        'product_id' => $item->model->id,
-                        'quantity' => $item->qty,
-                        'price' => $item->subtotal,
-                    ]);
+                //     }else{
+                //         $orders = Order::create([
+                //             'user_id' => Auth::user()->id,
+                //             'pay_method' => $this->payment_method,
+                //             'total' => Cart::total(0,0,'')
+                //         ]);
+                //     }
+                // }else{
+                //     $orders = Order::create([
+                //         'user_id' => Auth::user()->id,
+                //         'pay_method' => $this->payment_method,
+                //         'total' => Cart::total(0,0,'')
+                //     ]);
+                // }
+                $orderDetails=[];
+                foreach (Cart::content() as $key => $item) {
+                    // OrderItem::create([
+                        $orderDetails[$key]['order_id'] = $orders->id;
+                        $orderDetails[$key]['product_id'] = $item->model->id;
+                        $orderDetails[$key]['quantity'] = $item->qty;
+                        $orderDetails[$key]['price'] = $item->subtotal;
+                        $orderDetails[$key]['price'] = $item->subtotal;
+                        $orderDetails[$key]['color'] = $item->options->color;
+                        $orderDetails[$key]['created_at'] = now();
+                        $orderDetails[$key]['updated_at'] = now();
+                    // ]);
+                    //Update quantity
+                    Product::find($item->model->id)->decrement('quantity',$item->qty);
                 };
+                OrderItem::insert($orderDetails);
                 $this->emit('thankyou');
                 $this->destroyAll();
                 // $this->ResetInput();
-                if(Discount::where('code',$this->discount)->first()){
-                    Discount::where('code',$this->discount)->first()->discount_users()->updateExistingPivot(Auth::user()->id,['status'=>'disable']);
+                if($discounts){
+                    $discounts->discount_users()->updateExistingPivot(Auth::user()->id,['status'=>'disable']);
                 }
             }
         }else{
             $this->emit('cart_empty');
         }
     }
+    //Update Quantity
     public function upQuantity($rowId){
         $product = Cart::get($rowId);
         $qty = $product->qty + 1;
@@ -137,6 +152,7 @@ class CheckoutComponent extends Component
         $qty = $product->qty - 1;
         Cart::update($rowId,$qty);
     }
+    //Delete Cart
     public function remove($rowId){
         Cart::remove($rowId);
     }
@@ -146,8 +162,24 @@ class CheckoutComponent extends Component
         $districts = District::where('matp',$this->province)->get();
         $communes = Commune::where('maqh',$this->district)->get();
         $users = User::with('user_province','user_district','user_commune')->where('id',Auth::user()->id)->first();
-        $discounts = Discount::with('discount_users')->where('code',$this->discount)->first();
+        $discounts = Discount::with('discount_users')->where('code',$this->discount)
+        ->where('end_day','>',now())
+        ->whereHas('discount_users' , function($query) {
+            return $query->where('status','enable')->where('user_id',Auth::user()->id);
+        })->first();
         $popular_product = Product::orderBy('view','DESC')->paginate(12);
-        return view('livewire.checkout',compact('users','provinces','districts','communes','discounts','popular_product'))->layout('layouts.base');;
+        //Set Shipping
+        if($users->province_id!=0){
+            if(!empty(User::where('id',Auth::user()->id)->whereBetween('province_id',[0,37])->first())){
+                $shipping = 7;
+            }elseif(!empty(User::where('id',Auth::user()->id)->whereBetween('province_id',[38,68])->first())){
+                $shipping = 5;
+            }elseif(!empty(User::where('id',Auth::user()->id)->whereBetween('province_id',[70,96])->first())){
+                $shipping = 3;
+            }
+        }else{
+            $shipping = 0;
+        }
+        return view('livewire.checkout',compact('users','provinces','districts','communes','discounts','popular_product','shipping'))->layout('layouts.base');;
     }
 }

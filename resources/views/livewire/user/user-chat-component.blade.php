@@ -1,5 +1,7 @@
+
 <div>
-    <div class="messaging" wire:poll.5000ms = 'render'>
+
+    <div class="messaging" wire:poll.5000ms = 'render' >
         <div class="inbox_msg">
           <div class="inbox_people">
             <div class="headind_srch">
@@ -66,9 +68,9 @@
             <div class="type_msg">
               <div class="input_msg_write">
                 <form class="form" action="" wire:submit.prevent='Send_Mess' method="get">
-                        <div class="form-group">
-                            <span><input type="text" class="write_msg" wire:model = 'message' placeholder="Type a message" />
-                            <input class="form-control w-10" wire:model = 'image' type="file" name=""></span>
+                        <div class="form-group ">
+                            <span><input type="text" class="write_msg " wire:model = 'message' placeholder="Type a message" />
+                            <input  class="" wire:model = 'image' type="file" name=""></span>
                         </div>
                 <button class="msg_send_btn" type="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
                 </form>

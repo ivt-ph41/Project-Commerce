@@ -1,7 +1,7 @@
 <div class="left-sidebar-pro">
     <nav id="sidebar" class="">
         <div class="sidebar-header">
-            <a href="index.html"><img class="main-logo" src="{{asset('Admintle/img/logo/logo.png')}}"" alt="" /></a>
+            <a href="{{route('admin.dashboard')}}"><img class="main-logo" src="{{asset('Admintle/img/logo/logo.png')}}"" alt="" /></a>
             <strong><a href="index.html"><img src="{{asset('Admintle/img/logo/logosn.png')}}"" alt="" /></a></strong>
         </div>
         <div class="left-custom-menu-adp-wrap comment-scrollbar">
@@ -13,6 +13,12 @@
                                <span class="mini-click-non">Manager</span>
                             </a>
                         <ul class="submenu-angle" aria-expanded="true">
+                                <li><a title="Dashboard v.1" href="{{route('admin.user')}}"><span class="mini-sub-pro">User</span></a></li>
+                        </ul>
+                        <ul class="submenu-angle" aria-expanded="true">
+                            <li><a title="Dashboard v.1" href="{{route('admin.order')}}"><span class="mini-sub-pro">Orders</span></a></li>
+                    </ul>
+                        <ul class="submenu-angle" aria-expanded="true">
                             <li><a title="Dashboard v.1" href="{{route('admin.category')}}"><span class="mini-sub-pro">Categories</span></a></li>
                         </ul>
                         <ul class="submenu-angle" aria-expanded="true">
@@ -20,6 +26,9 @@
                         </ul>
                         <ul class="submenu-angle" aria-expanded="true">
                             <li><a title="Product" href="{{route('admin.product')}}"><span class="mini-sub-pro">Products</span></a></li>
+                        </ul>
+                        <ul class="submenu-angle" aria-expanded="true">
+                            <li><a title="Product" href="{{route('admin.voucher')}}"><span class="mini-sub-pro">Voucher</span></a></li>
                         </ul>
                     </li>
                     <li>

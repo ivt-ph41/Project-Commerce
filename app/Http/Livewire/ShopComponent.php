@@ -2,8 +2,6 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\Category;
-use App\Models\Manufacturer;
 use App\Models\Product As Products;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Auth;
@@ -22,7 +20,7 @@ class ShopComponent extends Component
     }
     public function store($product_id,$product_name,$product_price){
         if(Auth::check()){
-            Cart::add($product_id,$product_name,1,$product_price)->associate('App\Models\Product');
+            Cart::add($product_id,$product_name,1,$product_price,['color' => 'Black'])->associate('App\Models\Product');
             $this->emit('cart');
         }else
         {
@@ -33,19 +31,34 @@ class ShopComponent extends Component
     public function render()
     {
         if($this->sort=="default"){
-            $products = Products::with('product_images')->Orwhere('name','like','%'.$this->search.'%')->Orwhere('regular_price','like','%'.$this->search.'%')->paginate(20);
+            $products = Products::with('product_images')->inRandomOrder()->where(function($query){
+                $query->where('quantity','>',0);
+            })->where(function($query){
+                $query ->where('name','like','%'.$this->search.'%')->Orwhere('regular_price','like','%'.$this->search.'%');
+            })->paginate(20);
         }
         else if($this->sort=="popularity"){
-            $products = Products::with('product_images')->Orwhere('name','like','%'.$this->search.'%')->Orwhere('regular_price','like','%'.$this->search.'%')->orderBy('view','DESC')->paginate(20);
+            $products = Products::with('product_images')->inRandomOrder()->where(function($query){
+                $query->where('quantity','>',0);
+            })->where(function($query){
+                $query ->where('name','like','%'.$this->search.'%')->Orwhere('regular_price','like','%'.$this->search.'%');
+            })->orderBy('view','DESC')->paginate(20);
         }else if($this->sort=="price"){
-            $products = Products::with('product_images')->Orwhere('name','like','%'.$this->search.'%')->Orwhere('regular_price','like','%'.$this->search.'%')->orderBy('regular_price')->paginate(20);
+            $products = Products::with('product_images')->inRandomOrder()->where(function($query){
+                $query->where('quantity','>',0);
+            })->where(function($query){
+                $query ->where('name','like','%'.$this->search.'%')->Orwhere('regular_price','like','%'.$this->search.'%');
+            })->orderBy('regular_price')->paginate(20);
         }
         else if($this->sort=="price-desc"){
-            $products = Products::with('product_images')->Orwhere('name','like','%'.$this->search.'%')->Orwhere('regular_price','like','%'.$this->search.'%')->orderBy('regular_price','DESC')->paginate(20);
-        }else
-        $products = Products::with('product_images')->Orwhere('name','like','%'.$this->search.'%')->Orwhere('regular_price','like','%'.$this->search.'%')->paginate(20);
+            $products = Products::with('product_images')->inRandomOrder()->where(function($query){
+                $query->where('quantity','>',0);
+            })->where(function($query){
+                $query ->where('name','like','%'.$this->search.'%')->Orwhere('regular_price','like','%'.$this->search.'%');
+            })->orderBy('regular_price','DESC')->paginate(20);
+        }
         if($this->price_start >0 && $this->price_end >0){
-            $products = Products::with('product_images')->whereBetween('regular_price', [$this->price_start, $this->price_end])
+            $products = Products::with('product_images')->inRandomOrder()->whereBetween('regular_price', [$this->price_start, $this->price_end])
             ->paginate(20);
         }
         return view('livewire.shop',compact('products'))->layout('layouts.base');;
